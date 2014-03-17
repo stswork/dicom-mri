@@ -94,7 +94,7 @@
                         } else {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="">
                         }
-                        @if(review.getAlbum() != null && review.getAlbum().getImageList().size() > 0) {
+                        @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
                                 <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
                                    <img src="@img.getImageUrl()" alt="" />
@@ -124,7 +124,7 @@
                 <tr>
                     <td>Comments : </td>
                 </tr>
-                @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
+                @if(review.getAlbum() != null && review.getAlbum().getCommentList() != null && review.getAlbum().getCommentList().size() > 0) {
                     @for(cmt <- review.getAlbum().getCommentList()) {
                     <tr>
                         <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>

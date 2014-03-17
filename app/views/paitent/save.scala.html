@@ -96,10 +96,12 @@
                         }
                         @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
-                                <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
-                                   <img src="@img.getImageUrl()" alt="" />
-                                   </a>
-                                </p>
+                                if(@img.getImageUrl() != null) {
+                                    <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
+                                       <img src="@img.getImageUrl()" alt="" />
+                                       </a>
+                                    </p>
+                                }
                             }
                         }
                         </td>
@@ -127,8 +129,10 @@
                 @if(review.getAlbum() != null && review.getAlbum().getCommentList() != null && review.getAlbum().getCommentList().size() > 0) {
                     @for(cmt <- review.getAlbum().getCommentList()) {
                     <tr>
-                        <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
-                        <td>@cmt.getMessage()</td>
+                        if(@cmt.getCommentedBy() != null && @cmt.getCommentedBy().getFullName() != null && @cmt.getMessage() != null) {
+                            <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
+                            <td>@cmt.getMessage()</td>
+                        }
                     </tr>
                     }
                 }

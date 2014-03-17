@@ -94,16 +94,14 @@
                         } else {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="">
                         }
-                        <p><a class="fancybox" rel="gallery1" href="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/1/multipartBody4411900507228668321asTemporaryFileProperty[millisOfDay].jpg" title="Misty Tree Orchard (Stanley Zimny)">
-                           <img src="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/1/multipartBody4411900507228668321asTemporaryFileProperty[millisOfDay].jpg" alt="" />
-                           </a>
-                           <a class="fancybox" rel="gallery1" href="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/23/multipartBody6991985080862077341asTemporaryFileProperty[millisOfDay].jpg" title="Last of the Leaves (h_roach)">
-                           <img src="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/23/multipartBody6991985080862077341asTemporaryFileProperty[millisOfDay].jpg" alt="" />
-                           </a>
-                           <a class="fancybox" rel="gallery1" href="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/45/multipartBody9015371286054488097asTemporaryFileProperty[millisOfDay].jpg" title="Seasons II (una cierta mirada)">
-                           <img src="https://s3-ap-southeast-1.amazonaws.com/www.appliedcloudcomputing.com/45/multipartBody9015371286054488097asTemporaryFileProperty[millisOfDay].jpg" alt="" />
-                           </a>
-                        </p>
+                        @if(review.getAlbum() != null && review.getAlbum().getImageList().size() > 0) {
+                            @for(img <- review.getAlbum().getImageList()) {
+                                <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
+                                   <img src="@img.getImageUrl()" alt="" />
+                                   </a>
+                                </p>
+                            }
+                        }
                         </td>
                     </tr>
                 </table>
@@ -122,6 +120,19 @@
                 </table>
             </form>
             }
+            <table>
+                <tr>
+                    <td>Comments : </td>
+                </tr>
+                @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
+                    @for(cmt <- review.getAlbum().getCommentList()) {
+                    <tr>
+                        <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
+                        <td>@cmt.getMessage()</td>
+                    </tr>
+                    }
+                }
+            </table>
         </div>
     </div>
     <div class="hr grid_12 clearfix">&nbsp;</div>

@@ -31,17 +31,17 @@ public class ReviewController extends Controller {
         List<Review> reviewList = new ArrayList<Review>();
         List<models.response.review.Review> reviews = new ArrayList<models.response.review.Review>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-        reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.imageList").fetch("album.patient").where(
-                Expr.or(
-                        Expr.and(
-                                Expr.eq("assignedTo.id", u.getId()),
-                                Expr.eq("reviewed", false)
-                        ),
-                        Expr.and(
-                                Expr.eq("createdBy.id", u.getId()),
-                                Expr.eq("reviewed", false)
-                        )
-                )
+        reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient").where(
+                    Expr.or(
+                            Expr.and(
+                                    Expr.eq("assignedTo.id", u.getId()),
+                                    Expr.eq("reviewed", false)
+                            ),
+                            Expr.and(
+                                    Expr.eq("createdBy.id", u.getId()),
+                                    Expr.eq("reviewed", false)
+                            )
+                    )
         ).findList();
         if(reviewList == null || reviewList.size() <= 0)
             reviewList = new ArrayList<Review>();
@@ -84,7 +84,7 @@ public class ReviewController extends Controller {
         List<Review> reviewList = new ArrayList<Review>();
         List<models.response.review.Review> reviews = new ArrayList<models.response.review.Review>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-        reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.imageList").fetch("album.patient").where(
+        reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient").where(
                 Expr.or(
                         Expr.and(
                                 Expr.eq("assignedTo.id", u.getId()),

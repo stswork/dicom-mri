@@ -1,6 +1,8 @@
 package controllers.comment;
 
 import actions.Authenticated;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
 import com.avaje.ebean.annotation.Transactional;
 import models.album.Album;
 import models.comment.Comment;
@@ -11,6 +13,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**

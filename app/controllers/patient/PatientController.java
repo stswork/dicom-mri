@@ -50,10 +50,32 @@ public class PatientController extends Controller {
     @With(Authenticated.class)
     public static Result save(Long id) {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-        Review r = (id > 0) ? Ebean.find(Review.class).fetch("album").fetch("album.patient").fetch("assignedTo")
-                .where(
-                        Expr.eq("id", id)
-                ).findUnique() : null;
+        Review r = null;
+        if(u.getUserType().equalsIgnoreCase("DOCTOR")) {
+            r = (id > 0) ? Ebean.find(Review.class).fetch("album")
+                    .fetch("album.imageList")
+                    .fetch("album.commentList")
+                    .fetch("album.commentList.commentedBy")
+                    .fetch("album.patient")
+                    .fetch("assignedTo")
+                    .where(
+                            Expr.and(
+                                    Expr.eq("id", id),
+                                    Expr.eq("album.commentList.commentedBy.id", u.getId())
+                            )
+                    ).findUnique() : null;
+        } else {
+            r = (id > 0) ? Ebean.find(Review.class)
+                    .fetch("album")
+                    .fetch("album.imageList")
+                    .fetch("album.commentList")
+                    .fetch("album.commentList.commentedBy")
+                    .fetch("album.patient")
+                    .fetch("assignedTo")
+                    .where(
+                                Expr.eq("id", id)
+                    ).findUnique() : null;
+        }
         List<User> user= Ebean.find(User.class).where(
                 Expr.and(
                         Expr.ne("id", 1),

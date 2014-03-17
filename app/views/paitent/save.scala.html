@@ -96,7 +96,7 @@
                         }
                         @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
-                                if(@img.getImageUrl() != null) {
+                                @if(img.getImageUrl().toString() != null) {
                                     <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
                                        <img src="@img.getImageUrl()" alt="" />
                                        </a>
@@ -124,18 +124,27 @@
             }
             <table>
                 <tr>
-                    <td>Comments : </td>
+                    <td><strong>Comments : </strong></td>
                 </tr>
-                @if(review.getAlbum() != null && review.getAlbum().getCommentList() != null && review.getAlbum().getCommentList().size() > 0) {
-                    @for(cmt <- review.getAlbum().getCommentList()) {
-                    <tr>
-                        if(@cmt.getCommentedBy() != null && @cmt.getCommentedBy().getFullName() != null && @cmt.getMessage() != null) {
-                            <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
-                            <td>@cmt.getMessage()</td>
+
+                    @if(review.getAlbum() != null && review.getAlbum().getCommentList() != null && review.getAlbum().getCommentList().size() > 0) {
+                        @for(cmt <- review.getAlbum().getCommentList()) {
+                        <tr>
+                            @if(u.getUserType().toUpperCase().equals("DOCTOR") && u.getId() == cmt.getCommentedBy.getId()) {
+                                @if(cmt.getCommentedBy() != null && cmt.getCommentedBy().getDisplayName() != null && cmt.getMessage() != null) {
+                                    <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
+                                    <td>@cmt.getMessage()</td>
+                                }
+                            }
+                            @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                @if(cmt.getCommentedBy() != null && cmt.getCommentedBy().getDisplayName() != null && cmt.getMessage() != null) {
+                                    <td><strong>@cmt.getCommentedBy().getDisplayName() : </strong></td>
+                                    <td>@cmt.getMessage()</td>
+                                }
+                            }
+                        </tr>
                         }
-                    </tr>
                     }
-                }
             </table>
         </div>
     </div>

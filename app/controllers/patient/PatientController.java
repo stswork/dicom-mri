@@ -247,14 +247,14 @@ public class PatientController extends Controller {
                         r.save();
                     }
                 }
-                /*try {
-                //SENDING EMAIL
+                try {
+                    //SENDING EMAIL
                     Mail mail = new Mail(p.getFullName(), p.getEmail(), user.getDisplayName(), user.getUserName());
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         }
 

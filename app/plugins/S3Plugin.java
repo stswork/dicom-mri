@@ -30,7 +30,7 @@ public class S3Plugin extends Plugin {
         s3Bucket = application.configuration().getString(AWS_S3_BUCKET);
         try {
             if ((accessKey != null) && (secretKey != null)) {
-                AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+                AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey,secretKey);
                 amazonS3 = new AmazonS3Client(awsCredentials);
                 amazonS3.createBucket(s3Bucket);
                 Logger.info("USING S3 BUCKET : " + s3Bucket);

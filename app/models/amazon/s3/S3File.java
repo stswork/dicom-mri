@@ -6,7 +6,7 @@ package models.amazon.s3;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import play.Logger;
 import play.db.ebean.Model;
 import plugins.S3Plugin;
@@ -44,7 +44,7 @@ public class S3File extends Model {
     }
 
     private String getActualFileName() {
-        return id + "/" + name;
+        return "/" + name;
     }
 
     @Override

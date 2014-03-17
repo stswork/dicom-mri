@@ -1,7 +1,7 @@
 package models.user;
 
 import models.review.Review;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 

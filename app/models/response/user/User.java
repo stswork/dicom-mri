@@ -1,6 +1,6 @@
 package models.response.user;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by Sagar Gopale on 3/11/14.

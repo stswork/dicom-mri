@@ -7,6 +7,7 @@ import akka.actor.Props;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.annotation.Transactional;
+import models.amazon.s3.S3File;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
 import models.review.Review;
@@ -28,11 +29,16 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
+import service.TelestrokeWebService;
+import utils.DicomManager;
+import utils.FileExtensionCheckUtil;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Sagar Gopale on 3/8/14.
@@ -121,7 +127,7 @@ public class PatientController extends Controller {
                 File file = null;
                 Image i = null;
 
-                /*//CHECKING IF FILE HAS VALID EXTENSION
+                //CHECKING IF FILE HAS VALID EXTENSION
                 boolean _validFile = FileExtensionCheckUtil.isValidFile(fp.getFilename());
                 if(!_validFile)
                     return badRequest(Json.toJson(new ResponseMessage(400, "Invalid file submission!", ResponseMessageType.BAD_REQUEST)));
@@ -133,7 +139,7 @@ public class PatientController extends Controller {
                     BufferedImage jpegImage = DicomManager.getJpegFromDicom(file);
                     if(jpegImage == null)
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
-                    String _s3Url = "C:\\Users\\user\\Desktop\\MRIConvert\\ScreenShot.png";//DicomManager.writeDicomJpegToS3(jpegImage, file.getName());
+                    String _s3Url = DicomManager.writeDicomJpegToS3(jpegImage, file.getName());
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
@@ -145,10 +151,16 @@ public class PatientController extends Controller {
                     i = new Image(_s3Url, a);
                 } else {
                     return badRequest(Json.toJson(new ResponseMessage(400, "Invalid file submission!", ResponseMessageType.BAD_REQUEST)));
-                }*/
-                i = new Image("http://www.bytelyte.com/Dicom2.JPG", a); //HARD CODED AS ABOVE CODE TEMPORARILY COMMENTED
-                i.setCreatedBy(loggedInUser);
-                i.save();
+                }
+                try {
+                    i.setCreatedBy(loggedInUser);
+                    i.save();
+                    /*if(!file1.exists())
+                        file1.createNewFile();
+                    TelestrokeWebService.uploadFile(file1, i.getId());*/
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             c = new Comment(comment, a, loggedInUser);
             c.setCreatedBy(loggedInUser);
@@ -213,14 +225,14 @@ public class PatientController extends Controller {
                         r.save();
                     }
                 }
-                try {
+                /*try {
                 //SENDING EMAIL
                     Mail mail = new Mail(p.getFullName(), p.getEmail(), user.getDisplayName(), user.getUserName());
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         }
 

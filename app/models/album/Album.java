@@ -1,10 +1,10 @@
 package models.album;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import models.comment.Comment;
 import models.review.Review;
 import models.patient.Patient;
 import models.user.User;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 import play.data.format.Formats;
 import play.db.ebean.Model;

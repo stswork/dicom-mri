@@ -1,7 +1,7 @@
 package models.response.album;
 
 import models.response.comment.Comment;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;

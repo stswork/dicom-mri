@@ -1,10 +1,10 @@
 package actions;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import models.response.user.User;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import play.Logger;
 import play.libs.F;
 import play.mvc.Action;

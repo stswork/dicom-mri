@@ -120,19 +120,22 @@
                 </table>
             </form>
             }
-            <table>
-                <tr>
-                    <td>Comments : </td>
-                </tr>
-                @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
-                    @for(cmt <- review.getAlbum().getCommentList()) {
+
+                <table>
                     <tr>
-                        <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
-                        <td>@cmt.getMessage()</td>
+                        <td>Doctor </td>
+                        <td>Comment</td>
                     </tr>
+                    @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
+                        @for(cmt <- review.getAlbum().getCommentList()) {
+                        <tr>
+                            <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
+                            <td>@cmt.getMessage()</td>
+                        </tr>
+                        }
                     }
-                }
-            </table>
+                </table>
+
         </div>
     </div>
     <div class="hr grid_12 clearfix">&nbsp;</div>

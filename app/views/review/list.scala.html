@@ -16,7 +16,7 @@
             <form id="contactform">
                 <table  cellspacing="0">
                     <tr>
-                        <!--<th>Sr No.</th>-->
+                      <!--  <th>Sr No.</th>-->
                         <th>Patient Name</th>
                         <th>Email</th>
                         <!--<th>Age</th>-->
@@ -31,7 +31,7 @@
 
                     @for(r <- reviewList) {
                     <tr>
-                         <!--<td>@(i+=1)</td>-->
+                      <!--   <td>@(i+=1)</td>-->
                         @if(r.getPatientName().equals("")) {
                             <td></td>
                         } else {

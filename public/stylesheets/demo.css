@@ -115,6 +115,7 @@ a{
 }
 .freshdesignweb-top span.right{
 	float: right;
+	padding-right: 30px;
 }
 .freshdesignweb-top span.right a{
 	float: left;

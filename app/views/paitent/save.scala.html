@@ -97,7 +97,7 @@
                         @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
                                 @if(img.getImageUrl().toString() != null) {
-                                    <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
+                                    <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="">
                                        <img src="@img.getImageUrl()" alt="" />
                                        </a>
                                     </p>

@@ -94,12 +94,14 @@
                         } else {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="">
                         }
-                        @if(review.getAlbum() != null && review.getAlbum().getImageList().size() > 0) {
+                        @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
-                                <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="Seasons II (una cierta mirada)">
-                                   <img src="@img.getImageUrl()" alt="" />
-                                   </a>
-                                </p>
+                                @if(img.getImageUrl().toString() != null) {
+                                    <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="">
+                                       <img src="@img.getImageUrl()" alt="" />
+                                       </a>
+                                    </p>
+                                }
                             }
                         }
                         </td>

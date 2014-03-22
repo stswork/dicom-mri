@@ -33,6 +33,9 @@ public class S3File extends Model {
     @Transient
     public File file;
 
+    public S3File() {
+    }
+
     public S3File(UUID id, String name, File file) {
         this.id = id;
         this.name = name;

@@ -11,16 +11,16 @@
 GET  /assets/*file                  controllers.Assets.at(path="/public", file)
 
 # AUTHENTICATION
-GET         /                       controllers.AuthenticationController.login()
-POST        /authenticate           controllers.AuthenticationController.handleLogin()
-GET         /logout                 controllers.AuthenticationController.logout()
+GET         /                        controllers.AuthenticationController.login()
+POST        /authenticate            controllers.AuthenticationController.handleLogin()
+GET         /logout                  controllers.AuthenticationController.logout()
 
 # PATIENT
-GET         /patient/:id            controllers.patient.PatientController.save(id: Long)
-POST        /patient                controllers.patient.PatientController.handleSave()
+GET         /patient/:id             controllers.patient.PatientController.save(id: Long)
+POST        /patient                 controllers.patient.PatientController.handleSave()
 
 # ALBUM
-POST        /album/image/remove     controllers.album.AlbumController.removeImage()
+POST        /album/image/remove      controllers.album.AlbumController.removeImage()
 
 # REVIEW
 GET         /list                    controllers.review.ReviewController.getPatientsToReview()
@@ -29,3 +29,11 @@ POST        /review                  controllers.review.ReviewController.review(
 
 # COMMENT
 POST        /comment                 controllers.comment.CommentController.handleSave()
+
+# Admin
+GET         /loginpic/:id            controllers.loginPic.LoginPicController.save(id: Long)
+POST        /loginpic                controllers.loginPic.LoginPicController.handleSave()
+
+#User
+GET         /user/:id                controllers.user.UserController.save(id: Long)
+POST        /user                    controllers.user.UserController.handleSave()

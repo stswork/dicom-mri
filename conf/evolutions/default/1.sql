@@ -1,3 +1,6 @@
+# --- Created by Ebean DDL
+# To stop Ebean DDL generation, remove this comment and start using Evolutions
+
 # --- !Ups
 
 create table album (
@@ -28,6 +31,15 @@ create table image (
   created_by_id             bigint,
   modified_by_id            bigint,
   constraint pk_image primary key (id))
+;
+
+create table login (
+  id                        bigint not null,
+  image_url                 varchar(255),
+  created                   timestamp,
+  created_by_id             bigint,
+  modified_by_id            bigint,
+  constraint pk_login primary key (id))
 ;
 
 create table patient (
@@ -79,6 +91,8 @@ create sequence comment_seq;
 
 create sequence image_seq;
 
+create sequence login_seq;
+
 create sequence patient_seq;
 
 create sequence review_seq;
@@ -105,22 +119,26 @@ alter table image add constraint fk_image_createdBy_9 foreign key (created_by_id
 create index ix_image_createdBy_9 on image (created_by_id);
 alter table image add constraint fk_image_modifiedBy_10 foreign key (modified_by_id) references o_user (id);
 create index ix_image_modifiedBy_10 on image (modified_by_id);
-alter table patient add constraint fk_patient_createdBy_11 foreign key (created_by_id) references o_user (id);
-create index ix_patient_createdBy_11 on patient (created_by_id);
-alter table patient add constraint fk_patient_modifiedBy_12 foreign key (modified_by_id) references o_user (id);
-create index ix_patient_modifiedBy_12 on patient (modified_by_id);
-alter table review add constraint fk_review_album_13 foreign key (album_id) references album (id);
-create index ix_review_album_13 on review (album_id);
-alter table review add constraint fk_review_assignedTo_14 foreign key (assigned_to_id) references o_user (id);
-create index ix_review_assignedTo_14 on review (assigned_to_id);
-alter table review add constraint fk_review_createdBy_15 foreign key (created_by_id) references o_user (id);
-create index ix_review_createdBy_15 on review (created_by_id);
-alter table review add constraint fk_review_modifiedBy_16 foreign key (modified_by_id) references o_user (id);
-create index ix_review_modifiedBy_16 on review (modified_by_id);
-alter table o_user add constraint fk_o_user_createdBy_17 foreign key (created_by_id) references o_user (id);
-create index ix_o_user_createdBy_17 on o_user (created_by_id);
-alter table o_user add constraint fk_o_user_modifiedBy_18 foreign key (modified_by_id) references o_user (id);
-create index ix_o_user_modifiedBy_18 on o_user (modified_by_id);
+alter table login add constraint fk_login_createdBy_11 foreign key (created_by_id) references o_user (id);
+create index ix_login_createdBy_11 on login (created_by_id);
+alter table login add constraint fk_login_modifiedBy_12 foreign key (modified_by_id) references o_user (id);
+create index ix_login_modifiedBy_12 on login (modified_by_id);
+alter table patient add constraint fk_patient_createdBy_13 foreign key (created_by_id) references o_user (id);
+create index ix_patient_createdBy_13 on patient (created_by_id);
+alter table patient add constraint fk_patient_modifiedBy_14 foreign key (modified_by_id) references o_user (id);
+create index ix_patient_modifiedBy_14 on patient (modified_by_id);
+alter table review add constraint fk_review_album_15 foreign key (album_id) references album (id);
+create index ix_review_album_15 on review (album_id);
+alter table review add constraint fk_review_assignedTo_16 foreign key (assigned_to_id) references o_user (id);
+create index ix_review_assignedTo_16 on review (assigned_to_id);
+alter table review add constraint fk_review_createdBy_17 foreign key (created_by_id) references o_user (id);
+create index ix_review_createdBy_17 on review (created_by_id);
+alter table review add constraint fk_review_modifiedBy_18 foreign key (modified_by_id) references o_user (id);
+create index ix_review_modifiedBy_18 on review (modified_by_id);
+alter table o_user add constraint fk_o_user_createdBy_19 foreign key (created_by_id) references o_user (id);
+create index ix_o_user_createdBy_19 on o_user (created_by_id);
+alter table o_user add constraint fk_o_user_modifiedBy_20 foreign key (modified_by_id) references o_user (id);
+create index ix_o_user_modifiedBy_20 on o_user (modified_by_id);
 
 
 
@@ -131,6 +149,8 @@ drop table if exists album cascade;
 drop table if exists comment cascade;
 
 drop table if exists image cascade;
+
+drop table if exists login cascade;
 
 drop table if exists patient cascade;
 
@@ -145,6 +165,8 @@ drop sequence if exists album_seq;
 drop sequence if exists comment_seq;
 
 drop sequence if exists image_seq;
+
+drop sequence if exists login_seq;
 
 drop sequence if exists patient_seq;
 

@@ -1,6 +1,8 @@
 package controllers.loginPic;
 
 import actions.Authenticated;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
 import com.avaje.ebean.annotation.Transactional;
 import models.album.Image;
 import models.album.Login;
@@ -29,23 +31,45 @@ public class LoginPicController extends Controller {
 
     @Transactional
     @With(Authenticated.class)
-    public static Result save(Long id) {
+    public static Result save(Long id){
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        Login loginPic =null;
+        loginPic=(id > 0) ? Ebean.find(Login.class)
+                .where(
+                        Expr.eq("id", id)
+                ).findUnique() : null;
+        if(loginPic == null){
+            loginPic=new Login();
+        }
+        return ok(views.html.admin.save.render("Administrator",loginPic));
+    }
+
+
+
+    @Transactional
+    @With(Authenticated.class)
+    public static Result handleSave() {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         Login loginPic;
         File file = null;
         Image i = null;
         Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+        Http.MultipartFormData.FilePart uploadFilePart = body.getFile("jpegFC");
         if (uploadFilePart != null) {
             try{
                 S3File s3File = new S3File();
                 s3File.name = uploadFilePart.getFilename();
                 s3File.file = uploadFilePart.getFile();
+
                 s3File.save();
-                loginPic=new Login(id,s3File.getUrl().toString());
+                loginPic=new Login();
+                loginPic.setImageUrl(s3File.getUrl().toString());
                 loginPic.setCreatedBy(loggedInUser);
                 loginPic.save();
+
+                return redirect(controllers.loginPic.routes.LoginPicController.save(0));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 badRequest(Json.toJson(new ResponseMessage(400, "File Upload Error Submission!", ResponseMessageType.BAD_REQUEST)));
@@ -56,16 +80,12 @@ public class LoginPicController extends Controller {
             badRequest(Json.toJson(new ResponseMessage(400, "File Upload Error Submission!", ResponseMessageType.BAD_REQUEST)));
         }
 
-
-
-    }
-
-
-
-    public static Result upload() {
-
-            return redirect(routes.Application.index());
+        return redirect(controllers.loginPic.routes.LoginPicController.save(0));
 
     }
+
+
+
+
 
     }

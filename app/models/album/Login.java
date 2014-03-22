@@ -1,5 +1,6 @@
 package models.album;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import models.user.User;
 import org.joda.time.DateTime;
 import play.data.format.Formats;
@@ -16,6 +17,8 @@ import java.sql.Timestamp;
  * Time: 10:17 PM
  * To change this template use File | Settings | File Templates.
  */
+@Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Login extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,9 @@ public class Login extends Model {
 
     @OneToOne
     private User modifiedBy;
+
+    public Login() {
+    }
 
     public Login(Long id, String imageUrl) {
         this.id = id;

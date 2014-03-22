@@ -1,0 +1,62 @@
+@(message: String, u: models.response.user.User, user: List[models.response.user.User])
+@import tags._
+@import java.math.BigInteger; var i=0
+@main("Home") {
+<div id="wrapper" class="container_12 clearfix">
+    <!-- Text Logo -->
+    @header()
+    <div class="container">
+        <header>
+            <h1>Patient List</h1>
+        </header>
+
+        <button onclick="location.href='@controllers.user.routes.UserController.save(0)'" style="font-size: 18px;">Add User</button>
+
+        <div style="width:975px;" class="form">
+            <form id="contactform">
+                <table  cellspacing="0">
+                    <tr>
+                        <!--  <th>Sr No.</th>-->
+                        <th>User Name</th>
+                        <th>Display Name</th>
+                        <th>User Type</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+
+                    </tr>
+
+                    @for(ur <- user) {
+                    <tr>
+                        <!--   <td>@(i+=1)</td>-->
+                        <td><a href="/user/@ur.getId()">@ur.getUserName()</a></td>
+                        <td>@ur.getDisplayName()</td>
+                        <td>@ur.getUserType().toString()</td>
+                        <td><a href="/user/@ur.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
+                        <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>
+                    </tr>
+                    }
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="hr grid_12 clearfix">&nbsp;</div>
+    <!-- Footer -->
+    @footer()
+</div>
+} {
+
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/table.css")'>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+    /* For zebra striping */
+    $("table tr:nth-child(odd)").addClass("odd-row");
+    /* For cell text alignment */
+    $("table td:first-child, table th:first-child").addClass("first");
+    /* For removing the last border */
+    $("table td:last-child, table th:last-child").addClass("last");
+    });
+</script>
+
+<!-- Table goes in the document BODY -->
+}

@@ -122,21 +122,20 @@
                 </table>
             </form>
             }
-
-                <table>
+            <table>
+                <tr>
+                    <td>Doctor </td>
+                    <td>Comment</td>
+                </tr>
+                @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
+                    @for(cmt <- review.getAlbum().getCommentList()) {
                     <tr>
-                        <td>Doctor </td>
-                        <td>Comment</td>
+                        <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
+                        <td>@cmt.getMessage()</td>
                     </tr>
-                    @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
-                        @for(cmt <- review.getAlbum().getCommentList()) {
-                        <tr>
-                            <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
-                            <td>@cmt.getMessage()</td>
-                        </tr>
-                        }
                     }
-                </table>
+                }
+            </table>
 
         </div>
     </div>

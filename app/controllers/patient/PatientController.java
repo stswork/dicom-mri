@@ -61,7 +61,7 @@ public class PatientController extends Controller {
                 .where(
                                 Expr.eq("id", id)
                 ).findUnique() : null;
-        List<User> user= Ebean.find(User.class).where(
+        List<User> users= Ebean.find(User.class).where(
                 Expr.and(
                         Expr.ne("id", 1),
                         Expr.eq("userType", UserType.DOCTOR)
@@ -69,7 +69,7 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
-        return ok(views.html.paitent.save.render("Patient", u, user, r));
+        return ok(views.html.paitent.save.render("Patient", u, users, r));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.

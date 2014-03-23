@@ -4,7 +4,7 @@ users:
         userName: superuser
         password: superuser
         displayName: Super User
-        userType: DOCTOR
+        userType: SUPER_USER
         createdBy: !!models.user.User
                     id: 1
 

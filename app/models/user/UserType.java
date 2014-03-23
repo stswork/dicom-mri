@@ -7,5 +7,6 @@ import com.avaje.ebean.annotation.EnumValue;
  */
 public enum UserType {
     DOCTOR,
-    MRI_SCAN_CENTER
+    MRI_SCAN_CENTER,
+    SUPER_USER
 }

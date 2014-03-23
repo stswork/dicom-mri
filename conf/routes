@@ -31,9 +31,9 @@ POST        /review                  controllers.review.ReviewController.review(
 POST        /comment                 controllers.comment.CommentController.handleSave()
 
 # Admin
-GET         /loginpic/:id            controllers.loginPic.LoginPicController.save(id: Long)
+GET         /loginpic                controllers.loginPic.LoginPicController.save(id: Long ?= 0)
 POST        /loginpic                controllers.loginPic.LoginPicController.handleSave()
 
 #User
-GET         /user/:id                controllers.user.UserController.save(id: Long)
+GET         /user                    controllers.user.UserController.save(id: Long ?= 0)
 POST        /user                    controllers.user.UserController.handleSave()

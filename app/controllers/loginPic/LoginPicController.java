@@ -10,6 +10,7 @@ import models.amazon.s3.S3File;
 import models.response.ResponseMessage;
 import models.response.ResponseMessageType;
 import models.user.User;
+import models.user.UserType;
 import org.apache.commons.lang3.StringUtils;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -31,20 +32,19 @@ public class LoginPicController extends Controller {
 
     @Transactional
     @With(Authenticated.class)
-    public static Result save(Long id){
+    public static Result save(long id){
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-        Login loginPic =null;
-        loginPic=(id > 0) ? Ebean.find(Login.class)
+        if(!UserType.valueOf(u.getUserType()).equals(UserType.SUPER_USER))
+            return redirect(controllers.routes.AuthenticationController.login());
+        Login loginPic = null;
+        loginPic = (id > 0) ? Ebean.find(Login.class)
                 .where(
                         Expr.eq("id", id)
                 ).findUnique() : null;
-        if(loginPic == null){
-            loginPic=new Login();
-        }
+        if(loginPic == null)
+            loginPic = new Login();
         return ok(views.html.admin.save.render("Administrator",loginPic));
     }
-
-
 
     @Transactional
     @With(Authenticated.class)
@@ -61,13 +61,11 @@ public class LoginPicController extends Controller {
                 S3File s3File = new S3File();
                 s3File.name = uploadFilePart.getFilename();
                 s3File.file = uploadFilePart.getFile();
-
                 s3File.save();
-                loginPic=new Login();
+                loginPic = new Login();
                 loginPic.setImageUrl(s3File.getUrl().toString());
                 loginPic.setCreatedBy(loggedInUser);
                 loginPic.save();
-
                 return redirect(controllers.loginPic.routes.LoginPicController.save(0));
 
             } catch (Exception e) {

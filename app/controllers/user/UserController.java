@@ -24,21 +24,20 @@ import java.util.Map;
  * Time: 10:38 PM
  * To change this template use File | Settings | File Templates.
  */
-
-
-@Transactional
-@With(Authenticated.class)
 public class UserController extends Controller {
 
-    public static Result save(Long id){
-        models.response.user.User u=(models.response.user.User) ctx().args.get("user");
+    @With(Authenticated.class)
+    public static Result save(long id){
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        if(!UserType.valueOf(u.getUserType()).equals(UserType.SUPER_USER))
+            return redirect(controllers.routes.AuthenticationController.login());
         User user = null;
-        user=(id>0) ? Ebean.find(User.class)
+        user = (id > 0) ? Ebean.find(User.class)
                 .where(
-                        Expr.eq("id",id)
+                        Expr.eq("id", id)
                 ).findUnique() : null;
-        if(user==null){
-            user=new User();
+        if(user == null){
+            user = new User();
         }
         return ok(views.html.user.save.render("Administrator",user));
     }

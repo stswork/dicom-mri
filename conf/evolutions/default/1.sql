@@ -81,7 +81,7 @@ create table o_user (
   user_type                 integer,
   created_by_id             bigint,
   modified_by_id            bigint,
-  constraint ck_o_user_user_type check (user_type in (0,1)),
+  constraint ck_o_user_user_type check (user_type in (0,1,2)),
   constraint pk_o_user primary key (id))
 ;
 

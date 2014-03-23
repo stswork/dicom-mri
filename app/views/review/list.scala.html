@@ -9,12 +9,15 @@
         <header>
             <h1>Patient List</h1>
         </header>
+        <div style="width:975px;" class="form">
         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
         <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
         }
+        <input type="text" placeholder="Search bar" name="searchQ" id="searchQ"/>
+        </div>
         <div style="width:975px;" class="form">
             <form id="contactform">
-                <table  cellspacing="0">
+                <table cellspacing="0" id="reviewList">
                     <tr>
                       <!--  <th>Sr No.</th>-->
                         <th>Patient Name</th>
@@ -83,8 +86,11 @@
 } {
 
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/table.css")'>
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/tablePaginator.css")'>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/jquery.tablePagination.0.5.js")'></script>
 <script type="text/javascript">
+
     $(function() {
     /* For zebra striping */
     $("table tr:nth-child(odd)").addClass("odd-row");
@@ -92,6 +98,42 @@
     $("table td:first-child, table th:first-child").addClass("first");
     /* For removing the last border */
     $("table td:last-child, table th:last-child").addClass("last");
+    });
+    // document ready function
+    $(document).ready(function() {
+        $("#searchQ").bind("keyup", function() {
+            var value = $(this).val().toUpperCase();
+            $("table tr").each(function(index) {
+                if (index !== 0) {
+                    $row = $(this);
+                    var _pn = $row.find("td").eq(0).text().toUpperCase();
+                    var _email = $row.find("td").eq(1).text().toUpperCase();
+                    var _doc = $row.find("td").eq(4).text().toUpperCase();
+                    if (_pn.indexOf(value) >= 0) {
+                        $row.show();
+                    } else if (_email.indexOf(value) >= 0) {
+                        $row.show();
+                    } else if (_doc.indexOf(value) >= 0) {
+                        $row.show();
+                    } else {
+                        $row.hide();
+                    }
+                }
+            });
+        });
+
+        var options = {
+              currPage : 1,
+              optionsForRows : [10,15,20],
+              rowsPerPage : 5,
+              ignoreRows : $('tr:first', $('#reviewList')),
+              firstArrow : (new Image()).src="@routes.Assets.at("images/first.gif")",
+              prevArrow : (new Image()).src="@routes.Assets.at("images/prev.gif")",
+              lastArrow : (new Image()).src="@routes.Assets.at("images/last.gif")",
+              nextArrow : (new Image()).src="@routes.Assets.at("images/next.gif")",
+              topNav : true
+            }
+            $('#reviewList').tablePagination(options);
     });
 </script>
 

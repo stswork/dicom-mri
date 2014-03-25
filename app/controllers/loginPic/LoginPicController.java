@@ -43,7 +43,7 @@ public class LoginPicController extends Controller {
                 ).findUnique() : null;
         if(loginPic == null)
             loginPic = new Login();
-        return ok(views.html.admin.save.render("Administrator",loginPic));
+        return ok(views.html.admin.save.render("Administrator", loginPic, u));
     }
 
     @Transactional

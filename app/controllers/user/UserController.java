@@ -39,7 +39,7 @@ public class UserController extends Controller {
         if(user == null){
             user = new User();
         }
-        return ok(views.html.user.save.render("Administrator",user));
+        return ok(views.html.user.save.render("Administrator", user, u));
     }
 
 

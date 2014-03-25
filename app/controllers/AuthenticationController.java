@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.Authenticated;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +15,7 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.With;
 
 /**
  * Created by Sagar Gopale on 3/8/14.
@@ -55,6 +57,15 @@ public class AuthenticationController extends Controller {
             e.printStackTrace();
             return badRequest(Json.toJson(new ResponseMessage(400, "No such user found!", ResponseMessageType.BAD_REQUEST)));
         }
+    }
+
+    @With(Authenticated.class)
+    public static Result checkLogin(){
+
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        User loggedInUser = User.find.byId(u.getId());
+
+        return ok();
     }
 
     public static Result logout() {

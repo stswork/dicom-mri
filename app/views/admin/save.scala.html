@@ -1,10 +1,9 @@
-@(message: String, loginPic: models.album.Login)
+@(message: String, loginPic: models.album.Login, u: models.response.user.User)
 @import tags._
 @main("Admin") {
 <div id="wrapper" class="container_12 clearfix">
     <!-- Text Logo -->
-    @header()
-
+    @header(u)
     <div class="container">
         <header>
             <h1><span>Administrator</span></h1>

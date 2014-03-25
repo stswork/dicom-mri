@@ -1,10 +1,15 @@
+@(u: models.response.user.User)
 <!--<h1 id="logo" class="grid_4">Telestroke</h1>-->
 <!-- Navigation Menu -->
 <div class="freshdesignweb-top">
 <ul id="navigation" class="grid_18">
-   <!-- <li><a href="#"><span class="meta">Get in touch</span><br />
-        Contact Us</a></li>-->
-    <li><a href="@controllers.review.routes.ReviewController.getPatientsReviewed()" class="current"><span class="meta">Old patient data</span><br />
+    @if(u.getUserType.equalsIgnoreCase("SUPER_USER")) {
+    <li><a href="@controllers.loginPic.routes.LoginPicController.save(0)"><span class="meta">Change Login Screen Picture</span><br />
+        Change</a></li>
+    <li><a href="@controllers.user.routes.UserController.save(0)"><span class="meta">New User?</span><br />
+        Add</a></li>
+    }
+    <li><a href="@controllers.review.routes.ReviewController.getPatientsReviewed()"><span class="meta">Old patient data</span><br />
         Reviewed</a></li>
     <li><a href="@controllers.review.routes.ReviewController.getPatientsToReview()"><span class="meta">Did not review patient ?</span><br />
         UnReviewed</a></li>

@@ -1,14 +1,13 @@
-@(message: String, u: models.user.User)
+@(message: String, u: models.user.User, user: models.response.user.User)
 
 @import tags._
 @main("User") {
 <div id="wrapper" class="container_12 clearfix">
     <!-- Text Logo -->
-    @header()
+    @header(user)
 
     <div class="container">
         <header>
-
             <h1><span>ADMIN</span> CREATE NEW USER</h1>
 
         </header>

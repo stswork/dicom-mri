@@ -69,6 +69,10 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
+        else {
+            r.setReviewed(true);
+            r.update();
+        }
         return ok(views.html.paitent.save.render("Patient", u, users, r));
     }
 

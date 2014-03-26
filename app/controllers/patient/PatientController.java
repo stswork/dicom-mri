@@ -99,13 +99,13 @@ public class PatientController extends Controller {
         /*if(pf.hasErrors())
             return badRequest(Json.toJson(new ResponseMessage(400, "Invalid form submission!", ResponseMessageType.BAD_REQUEST)));
 */
-        try {
+        /*try {
             pf = Form.form(PatientRequest.class).bindFromRequest();
             //GETTING PATIENT REQUEST OBJECT FROM DYNAMIC FORM
            // pr = pf.get();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         if(id <= 0) {
             //GETTING LIST OF FILES FROM MULTIPART FORM
@@ -120,7 +120,7 @@ public class PatientController extends Controller {
                 p.setGender(Gender.valueOf(gender));
             } catch (Exception e) {
                 Logger.info("NO ENUM GENERATED FOR THE STRING " + gender);
-                return badRequest(Json.toJson(new ResponseMessage(400, "Invalid form submission!", ResponseMessageType.BAD_REQUEST)));
+                return badRequest(Json.toJson(new ResponseMessage(400, "Please select a proper gender!", ResponseMessageType.BAD_REQUEST)));
             }
             p.save();
 
@@ -150,7 +150,7 @@ public class PatientController extends Controller {
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
-                } else if (StringUtils.equalsIgnoreCase(_extension, "jpeg") || StringUtils.equalsIgnoreCase(_extension, "jpeg")) {
+                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg")) {
                     file = fp.getFile();
                     String _s3Url = DicomManager.writeJpegToS3(file);
                     if(StringUtils.isEmpty(_s3Url))

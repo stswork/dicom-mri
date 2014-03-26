@@ -63,8 +63,10 @@ public class ReviewController extends Controller {
                     images.add(image);
                 }
                 for (models.comment.Comment comment: r.getAlbum().getCommentList()) {
-                    Comment c = new Comment(comment.getId(), comment.getMessage());
-                    comments.add(c);
+                    if(comment.getCommentedBy().getUserType().equals(UserType.DOCTOR)) {
+                        Comment c = new Comment(comment.getId(), comment.getMessage());
+                        comments.add(c);
+                    }
                 }
                 album = new Album(r.getAlbum().getId(), comments, images);
             }

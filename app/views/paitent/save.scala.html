@@ -134,7 +134,7 @@
             </tr>
             @if(review.getAlbum() != null && review.getAlbum().getCommentList().size() > 0) {
             @for(cmt <- review.getAlbum().getCommentList()) {
-            @if(@cmt.getCommentedBy().getUserType().name().equalsIgnoreCase("DOCTOR")){
+            @if(cmt.getCommentedBy().getUserType().name().equalsIgnoreCase("DOCTOR")){
             <tr>
                 <td><strong>@cmt.getCommentedBy().getDisplayName()</strong></td>
                 <td>@cmt.getMessage()</td>

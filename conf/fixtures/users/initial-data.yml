@@ -1,0 +1,49 @@
+# USERS
+users:
+    - !!models.user.User
+        userName: superuser
+        password: superuser
+        displayName: Super User
+        userType: SUPER_USER
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: shantanu@telestroke.com
+        password: shantanu
+        displayName: Dr Shantanu
+        userType: DOCTOR
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: sagar@telestroke.com
+        password: sagar
+        displayName: Dr Sagar
+        userType: DOCTOR
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: anupam@telestroke.com
+        password: anupam
+        displayName: Dr Anupam
+        userType: DOCTOR
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+            userName: shubho.pramanik@gmail.com
+            password: shubho
+            displayName: Dr Shubho
+            userType: DOCTOR
+            createdBy: !!models.user.User
+                        id: 1
+
+    - !!models.user.User
+        userName: nilesh@telestroke.com
+        password: nilesh
+        displayName: Nilesh Satpute
+        userType: MRI_SCAN_CENTER
+        createdBy: !!models.user.User
+                    id: 1

@@ -1,0 +1,141 @@
+@(message: String, u: models.response.user.User, reviewList: List[models.response.review.Review])
+@import tags._
+@import java.math.BigInteger; var i=0
+@main("Home") {
+<div id="wrapper" class="container_12 clearfix">
+    <!-- Text Logo -->
+    @header(u)
+    <div class="container">
+        <header>
+            <h1>Patient List</h1>
+        </header>
+        <div style="width:975px;" class="form">
+        @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+        <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
+        }
+        <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ"/>
+        </div>
+        <div style="width:975px;" class="form">
+            <form id="contactform">
+                <table cellspacing="0" id="reviewList">
+                    <tr>
+                      <!--  <th>Sr No.</th>-->
+                        <th>Patient Name</th>
+                        <th>Email</th>
+                        <!--<th>Age</th>-->
+                        <th>Gender</th>
+                        <th>Created Date</th>
+                        <th>Assigned To</th>
+                        @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        }
+                    </tr>
+
+                    @for(r <- reviewList) {
+                    <tr>
+                      <!--   <td>@(i+=1)</td>-->
+                        @if(r == null || r.getPatientName().equals("")) {
+                            <td></td>
+                        } else {
+                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                <td><a href="/patient/@r.getId()">@r.getPatientName()</a></td>
+                            } else {
+                                <td>@r.getPatientName()</td>
+                            }
+                        }
+                        @if(r == null || r.getEmail().equals("")) {
+                            <td></td>
+                        } else {
+                            <td>@r.getEmail()</td>
+                        }
+                    <!--    @if(r.getAge().equals("")) {
+                            <td></td>
+                        } else {
+                            <td>@r.getAge()</td>
+                        }-->
+                        @if(r == null || r.getGender().equals("")) {
+                            <td></td>
+                        } else {
+                            <td>@r.getGender()</td>
+                        }
+                        @if(r == null || r.getCreated() == null) {
+                            <td></td>
+                        } else {
+                            <td>@r.getCreated().toString()</td>
+                        }
+                        @if(r == null || r.getAssignedToName().equals("")) {
+                            <td></td>
+                        } else {
+                            <td>@r.getAssignedToName()</td>
+                        }
+                        @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+                        <td><a href="/patient/@r.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
+                        <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>
+                        }
+                    </tr>
+                    }
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="hr grid_12 clearfix">&nbsp;</div>
+    <!-- Footer -->
+    @footer()
+</div>
+} {
+
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/table.css")'>
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/tablePaginator.css")'>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/jquery.tablePagination.0.5.js")'></script>
+<script type="text/javascript">
+
+    $(function() {
+    /* For zebra striping */
+    $("table tr:nth-child(odd)").addClass("odd-row");
+    /* For cell text alignment */
+    $("table td:first-child, table th:first-child").addClass("first");
+    /* For removing the last border */
+    $("table td:last-child, table th:last-child").addClass("last");
+    });
+    // document ready function
+    $(document).ready(function() {
+        $("#searchQ").bind("keyup", function() {
+            var value = $(this).val().toUpperCase();
+            $("table tr").each(function(index) {
+                if (index !== 0) {
+                    $row = $(this);
+                    var _pn = $row.find("td").eq(0).text().toUpperCase();
+                    var _email = $row.find("td").eq(1).text().toUpperCase();
+                    var _doc = $row.find("td").eq(4).text().toUpperCase();
+                    if (_pn.indexOf(value) >= 0) {
+                        $row.show();
+                    } else if (_email.indexOf(value) >= 0) {
+                        $row.show();
+                    } else if (_doc.indexOf(value) >= 0) {
+                        $row.show();
+                    } else {
+                        $row.hide();
+                    }
+                }
+            });
+        });
+
+        var options = {
+              currPage : 1,
+              optionsForRows : [10,15,20],
+              rowsPerPage : 5,
+              ignoreRows : $('tr:first', $('#reviewList')),
+              firstArrow : (new Image()).src="@routes.Assets.at("images/first.gif")",
+              prevArrow : (new Image()).src="@routes.Assets.at("images/prev.gif")",
+              lastArrow : (new Image()).src="@routes.Assets.at("images/last.gif")",
+              nextArrow : (new Image()).src="@routes.Assets.at("images/next.gif")",
+              topNav : true
+            }
+            $('#reviewList').tablePagination(options);
+    });
+</script>
+
+<!-- Table goes in the document BODY -->
+}

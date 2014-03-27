@@ -1,0 +1,50 @@
+@(message: String, u: models.user.User, user: models.response.user.User)
+
+@import tags._
+@main("User") {
+<div id="wrapper" class="container_12 clearfix">
+    <!-- Text Logo -->
+    @header(user)
+
+    <div class="container">
+        <header>
+            <h1><span>ADMIN</span> CREATE NEW USER</h1>
+
+        </header>
+        <div class="form" style="width:975px;background: #f1f1f1;border-radius: 10px;">
+            <form id="userForm" method="post" action="@controllers.user.routes.UserController.handleSave()" data-uri="@controllers.user.routes.UserController.save(0)" enctype="multipart/form-data">
+                <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
+                    <tr>
+                        <td><p class="contact"><label for="name">User Name :</label></p></td>
+                        <td><input id="userName" name="userName" placeholder="example@@gmail.com" required="" type="email"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="contact"><label for="password">Password :</label></p></td>
+                        <td><input id="password" name="password" placeholder="*******" required="" type="password"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="contact"><label for="display">Full Name :</label></p></td>
+                        <td><input id="displayName" name="displayName" placeholder="Enter your Name" required="" type="string"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="contact"><label for="userType"> Type :</label></p></td>
+                        <td><select class="gender" name="userType">
+                            <option value='DOCTOR'>DOCTOR</option>
+                            <option value='MRI_SCAN_CENTER'>MRI SCAN CENTER</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input class="button" name="submit" id="submit" value="Save" type="submit"></td>
+                    </tr>
+                </table>
+            </form>
+
+        </div>
+    </div>
+    <div class="hr grid_12 clearfix">&nbsp;</div>
+    <!-- Footer -->
+    @footer()
+</div>
+} {
+}

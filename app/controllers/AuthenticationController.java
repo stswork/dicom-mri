@@ -5,6 +5,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import models.album.Login;
 import models.request.authentication.AuthenticationRequest;
 import models.response.ResponseMessage;
 import models.response.ResponseMessageType;
@@ -17,14 +18,18 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
 
-/**
- * Created by Sagar Gopale on 3/8/14.
- */
 public class AuthenticationController extends Controller {
 
     public static Result login() {
+        Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
-            return ok(views.html.index.render("Welcome"));
+            if(l == null) {
+                String _url = controllers.routes.Assets.at("images/mri.jpeg").absoluteURL(request());
+                return ok(views.html.index.render("Welcome", _url));
+            } else {
+                String _url = l.getImageUrl();
+                return ok(views.html.index.render("Welcome", _url));
+            }
         } else {
             return redirect(controllers.review.routes.ReviewController.getPatientsToReview());
         }

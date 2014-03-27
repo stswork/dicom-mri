@@ -70,8 +70,10 @@ public class PatientController extends Controller {
         if(r == null)
             r = new Review();
         else {
-            r.setReviewed(true);
-            r.update();
+            if(UserType.valueOf(u.getUserType()).equals(UserType.DOCTOR)) {
+                r.setReviewed(true);
+                r.update();
+            }
         }
         return ok(views.html.paitent.save.render("Patient", u, users, r));
     }

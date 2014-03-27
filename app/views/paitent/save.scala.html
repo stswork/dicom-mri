@@ -33,9 +33,9 @@
                         }
                         <td><p class="contact"><label for="age">Age : </label></p></td>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getAge() != null) {
-                        <td><input id="age" name="age" placeholder="Age" required="" value="@review.getAlbum().getPatient().getAge()" type="text" style="width: 50px;"></td>
+                        <td><input id="age" name="age" placeholder="Age" required="" value="@review.getAlbum().getPatient().getAge()" type="number" style="width: 50px;"></td>
                         } else {
-                        <td><input id="age" name="age" placeholder="Age" required="" type="text" style="width: 50px;"></td>
+                        <td><input id="age" name="age" placeholder="Age" required="" type="number" style="width: 50px;"></td>
                         }
                     </tr>
                     <tr>
@@ -79,7 +79,6 @@
                         </td>
                         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
                         <td><input class="button" name="submit" id="submit" value="Save" type="submit"></td>
-                        <td><input class="button" name="update" id="update" value="Update" type="submit"></td>
                         }
                     </tr>
                     }

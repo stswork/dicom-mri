@@ -125,6 +125,7 @@ public class ReviewController extends Controller {
             models.response.review.Review review = new models.response.review.Review();
             review.setId(r.getId());
             review.setAssignedToId(r.getAssignedTo().getId());
+            review.setAssignedToName(r.getAssignedTo() == null || StringUtils.isEmpty(r.getAssignedTo().getDisplayName()) ? StringUtils.EMPTY : r.getAssignedTo().getDisplayName());
             review.setPatientId(r.getAlbum() == null || r.getAlbum().getPatient() == null ? null : r.getAlbum().getPatient().getId());
             review.setPatientName(r.getAlbum() == null || r.getAlbum().getPatient() == null || StringUtils.isEmpty(r.getAlbum().getPatient().getFullName()) ? StringUtils.EMPTY : r.getAlbum().getPatient().getFullName());
             review.setEmail(r.getAlbum() == null || r.getAlbum().getPatient() == null || StringUtils.isEmpty(r.getAlbum().getPatient().getEmail()) ? StringUtils.EMPTY : r.getAlbum().getPatient().getEmail());

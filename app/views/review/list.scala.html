@@ -13,7 +13,7 @@
         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
         <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
         }
-        <input type="text" placeholder="Search bar" name="searchQ" id="searchQ"/>
+        <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ"/>
         </div>
         <div style="width:975px;" class="form">
             <form id="contactform">
@@ -33,47 +33,47 @@
                     </tr>
 
                     @for(r <- reviewList) {
-                    <tr>
-                      <!--   <td>@(i+=1)</td>-->
-                        @if(r.getPatientName().equals("")) {
-                            <td></td>
-                        } else {
-                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
-                                <td><a href="/patient/@r.getId()">@r.getPatientName()</a></td>
+                        <tr>
+                            <!--   <td>@(i+=1)</td>-->
+                            @if(r == null || r.getPatientName() == "") {
+                                <td></td>
                             } else {
-                                <td>@r.getPatientName()</td>
+                                @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                    <td><a href="/patient/@r.getId()">@r.getPatientName()</a></td>
+                                } else {
+                                    <td>@r.getPatientName()</td>
+                                }
                             }
-                        }
-                        @if(r.getEmail().equals("")) {
-                            <td></td>
-                        } else {
-                            <td>@r.getEmail()</td>
-                        }
-                    <!--    @if(r.getAge().equals("")) {
-                            <td></td>
-                        } else {
-                            <td>@r.getAge()</td>
-                        }-->
-                        @if(r.getGender().equals("")) {
-                            <td></td>
-                        } else {
-                            <td>@r.getGender()</td>
-                        }
-                        @if(r.getCreated() == null) {
-                            <td></td>
-                        } else {
-                            <td>@r.getCreated().toString()</td>
-                        }
-                        @if(r.getAssignedToName().equals("")) {
-                            <td></td>
-                        } else {
-                            <td>@r.getAssignedToName()</td>
-                        }
-                        @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
-                        <td><a href="/patient/@r.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
-                        <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>
-                        }
-                    </tr>
+                            @if(r == null || r.getEmail() == "") {
+                                <td></td>
+                            } else {
+                                <td>@r.getEmail()</td>
+                            }
+                            <!--    @if(r.getAge().equals("")) {
+                                <td></td>
+                            } else {
+                                <td>@r.getAge()</td>
+                            }-->
+                            @if(r == null || r.getGender() == "") {
+                                <td></td>
+                            } else {
+                                <td>@r.getGender()</td>
+                            }
+                            @if(r == null || r.getCreated() == null) {
+                                <td></td>
+                            } else {
+                                <td>@r.getCreated().toString()</td>
+                            }
+                            @if(r == null || r.getAssignedToName() == "") {
+                                <td></td>
+                            } else {
+                                <td>@r.getAssignedToName()</td>
+                            }
+                            @if(!u.getUserType().toUpperCase().equalsIgnoreCase("DOCTOR")) {
+                            <td><a href="/patient/@r.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
+                            <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>
+                            }
+                        </tr>
                     }
                 </table>
             </form>

@@ -1,4 +1,4 @@
 dicom-mri
 =========
 
-DICOM MRI
+Dicom Mri

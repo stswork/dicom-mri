@@ -38,16 +38,13 @@ public class ReviewController extends Controller {
             reviewList = query.where(Expr.eq("reviewed", false)).findList();
         else {
             reviewList = query.where(
-                        Expr.or(
-                                Expr.and(
-                                        Expr.eq("assignedTo.id", u.getId()),
-                                        Expr.eq("reviewed", false)
-                                ),
-                                Expr.and(
-                                        Expr.eq("createdBy.id", u.getId()),
-                                        Expr.eq("reviewed", false)
-                                )
-                        )
+                    Expr.and(
+                            Expr.or(
+                                    Expr.eq("assignedTo.id", u.getId()),
+                                    Expr.eq("createdBy.id", u.getId())
+                            ),
+                            Expr.eq("reviewed", false)
+                    )
             ).findList();
         }
         if(reviewList == null || reviewList.size() <= 0)
@@ -98,15 +95,12 @@ public class ReviewController extends Controller {
             reviewList = query.where(Expr.eq("reviewed", true)).findList();
         else {
             reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient").where(
-                    Expr.or(
-                            Expr.and(
+                    Expr.and(
+                            Expr.or(
                                     Expr.eq("assignedTo.id", u.getId()),
-                                    Expr.eq("reviewed", true)
+                                    Expr.eq("createdBy.id", u.getId())
                             ),
-                            Expr.and(
-                                    Expr.eq("createdBy.id", u.getId()),
-                                    Expr.eq("reviewed", true)
-                            )
+                            Expr.eq("reviewed", true)
                     )
             ).findList();
         }
@@ -131,6 +125,7 @@ public class ReviewController extends Controller {
             models.response.review.Review review = new models.response.review.Review();
             review.setId(r.getId());
             review.setAssignedToId(r.getAssignedTo().getId());
+            review.setAssignedToName(r.getAssignedTo() == null || StringUtils.isEmpty(r.getAssignedTo().getDisplayName()) ? StringUtils.EMPTY : r.getAssignedTo().getDisplayName());
             review.setPatientId(r.getAlbum() == null || r.getAlbum().getPatient() == null ? null : r.getAlbum().getPatient().getId());
             review.setPatientName(r.getAlbum() == null || r.getAlbum().getPatient() == null || StringUtils.isEmpty(r.getAlbum().getPatient().getFullName()) ? StringUtils.EMPTY : r.getAlbum().getPatient().getFullName());
             review.setEmail(r.getAlbum() == null || r.getAlbum().getPatient() == null || StringUtils.isEmpty(r.getAlbum().getPatient().getEmail()) ? StringUtils.EMPTY : r.getAlbum().getPatient().getEmail());

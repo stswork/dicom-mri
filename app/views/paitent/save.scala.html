@@ -13,7 +13,7 @@
             <h1><!--<span></span>--> Patient Details</h1>
             }
         </header>
-        <div class="form" style="width:975px;background: #f1f1f1;border-radius: 10px;">
+        <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
                 <form id="patientForm" method="post" action="@controllers.patient.routes.PatientController.handleSave()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
                     <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
 
@@ -125,7 +125,7 @@
 
 
         </div>
-        <div class="form" style="width: 975px;background: #f1f1f1;border-radius: 25px;margin-top: 35px;">
+        <div class="form" style="width: 100%;background: #f1f1f1;border-radius: 25px;margin-top: 35px;">
         <table style="clear: both;float: left;" cellspacing="0">
             <tr>
                 <td>Doctor </td>
@@ -145,7 +145,7 @@
         </div>
 
     </div>
-    <div class="hr grid_12 clearfix">&nbsp;</div>
+    <!--<div class="hr grid_12 clearfix">&nbsp;</div>-->
     <!-- Footer -->
     @footer()
 </div>

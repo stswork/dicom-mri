@@ -9,13 +9,13 @@
         <header>
             <h1>Patient List</h1>
         </header>
-        <div style="width:975px;" class="form">
+        <div style="width:100%;background: #f1f1f1;border-radius: 25px;" class="form">
         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
         <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
         }
-        <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ"/>
+        <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ" style="margin: 13px 0px 0px 0px;"/>
         </div>
-        <div style="width:975px;" class="form">
+        <div style="width:100%;" class="form">
             <form id="contactform">
                 <table cellspacing="0" id="reviewList">
                     <tr>
@@ -79,7 +79,7 @@
             </form>
         </div>
     </div>
-    <div class="hr grid_12 clearfix">&nbsp;</div>
+   <!-- <div class="hr grid_12 clearfix">&nbsp;</div>-->
     <!-- Footer -->
     @footer()
 </div>

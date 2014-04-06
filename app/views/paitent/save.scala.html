@@ -14,7 +14,7 @@
             }
         </header>
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
-                <form id="patientForm" method="post" action="@controllers.patient.routes.PatientController.handleSave()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+                <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.handleSave()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
                     <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
 
                     <tr>
@@ -71,7 +71,7 @@
                     @if(review.getAlbum() == null){
                     <tr>
                         <td><p class="contact"><label for="doctorIds">Doctors:</label></p></td>
-                        <td><select class="gender" name="doctorIds" multiple>
+                        <td><select class="gender" name="doctorIds" id="doctorIds" multiple>
                              @for(u <- user) {
                                 <option value='@u.getId()'>@u.getDisplayName()</option>
                              }
@@ -84,8 +84,8 @@
                     }
 
                     <tr>
-                        <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*"></td>
-                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*"></td>
+                        <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2"></td>
                     </tr>
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {
@@ -169,6 +169,42 @@
         <script src="@routes.Assets.at("javascripts/jquery.fancybox-thumbs.js?v=1.0.7")" type="text/javascript"></script>
         <!-- Add Media helper (this is optional) -->
         <script src="@routes.Assets.at("javascripts/jquery.fancybox-media.js?v=1.0.5")" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            function validate() {
+                $check = true;
+                var files1,files2;
+                    $(".multi").each(function(){
+                        files1 = $(this).val();
+                    });
+
+                    $(".multi2").each(function(){
+                        files2 = $(this).val();
+                    });
+
+            if(files1==''&&files2=='') {
+                        alert("No document file selected");
+                        $check = false;
+                    }
+
+
+            $('#patientForm').validate({
+            rules: {
+            doctorIds: {
+            required: true
+
+            }
+            },
+            messages: {
+            doctorIds: {
+            minlength: $.format('Please select at least {0} things.')
+            }
+            }
+            });
+
+                return $check;
+            }
+        </script>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -351,6 +387,10 @@
             closeEffect	: 'none'
             });
             });
+
+
+
+
         </script>
         <style type="text/css">
             .fancybox-custom .fancybox-skin {

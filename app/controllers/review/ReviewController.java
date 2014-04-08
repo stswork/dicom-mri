@@ -80,7 +80,7 @@ public class ReviewController extends Controller {
             review.setCreated(r.getCreated());
             reviews.add(review);
         }
-        return ok(views.html.review.list.render("Data list", u, reviews));
+        return ok(views.html.review.list.render("Data list", u, reviews, StringUtils.EMPTY));
     }
 
     @Transactional
@@ -135,7 +135,7 @@ public class ReviewController extends Controller {
             review.setCreated(r.getCreated());
             reviews.add(review);
         }
-        return ok(views.html.review.list.render("Data list", u, reviews));
+        return ok(views.html.review.list.render("Data list", u, reviews, StringUtils.EMPTY));
     }
 
     @Transactional

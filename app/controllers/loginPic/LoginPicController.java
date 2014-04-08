@@ -67,17 +67,14 @@ public class LoginPicController extends Controller {
                 loginPic.setCreatedBy(loggedInUser);
                 loginPic.save();
                 return redirect(controllers.loginPic.routes.LoginPicController.save(0));
-
             } catch (Exception e) {
                 e.printStackTrace();
                 badRequest(Json.toJson(new ResponseMessage(400, "File Upload Error Submission!", ResponseMessageType.BAD_REQUEST)));
-
             }
         }
         else {
             badRequest(Json.toJson(new ResponseMessage(400, "File Upload Error Submission!", ResponseMessageType.BAD_REQUEST)));
         }
-
         return redirect(controllers.loginPic.routes.LoginPicController.save(0));
 
     }

@@ -35,5 +35,6 @@ GET         /loginpic                controllers.loginPic.LoginPicController.sav
 POST        /loginpic                controllers.loginPic.LoginPicController.handleSave()
 
 #User
+GET         /userList                controllers.user.UserController.handleSave()
 GET         /user                    controllers.user.UserController.save(id: Long ?= 0)
 POST        /user                    controllers.user.UserController.handleSave()

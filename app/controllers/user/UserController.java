@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class UserController extends Controller {
 
-/*    @With(Authenticated.class)
+    @With(Authenticated.class)
     public static Result getUser(){
         List<User> userList = new ArrayList<User>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
@@ -40,8 +40,8 @@ public class UserController extends Controller {
         userList=Ebean.find(User.class).findList();
 
 
-        return ok("Members",u,userList);
-    }*/
+        return ok(views.html.user.list.render("Members",u,userList));
+    }
 
     @With(Authenticated.class)
     public static Result save(long id){

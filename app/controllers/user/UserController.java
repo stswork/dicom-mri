@@ -35,10 +35,7 @@ public class UserController extends Controller {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         if(!UserType.valueOf(u.getUserType()).equals(UserType.SUPER_USER))
             return redirect(controllers.routes.AuthenticationController.login());
-        User user=new User();
-        Query<User> query = Ebean.find(User.class);
-        userList=Ebean.find(User.class).findList();
-
+        userList = Ebean.find(User.class).findList();
 
         return ok(views.html.user.list.render("Members",u,userList));
     }

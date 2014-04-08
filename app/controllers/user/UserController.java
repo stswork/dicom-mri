@@ -3,6 +3,7 @@ package controllers.user;
 import actions.Authenticated;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
+import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
 import models.response.ResponseMessage;
 import models.response.ResponseMessageType;
@@ -15,6 +16,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +28,20 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class UserController extends Controller {
+
+    @With(Authenticated.class)
+    public static Result getUser(){
+        List<User> userList = new ArrayList<User>();
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        if(!UserType.valueOf(u.getUserType()).equals(UserType.SUPER_USER))
+            return redirect(controllers.routes.AuthenticationController.login());
+        User user=new User();
+        Query<User> query = Ebean.find(User.class);
+        userList=Ebean.find(User.class).findList();
+
+
+        return ok(views.html.user.list.render("Members",u,userList));
+    }
 
     @With(Authenticated.class)
     public static Result save(long id){

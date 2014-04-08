@@ -1,7 +1,7 @@
 # USERS
 users:
     - !!models.user.User
-        userName: superuser
+        userName: superuser@telestroke.com
         password: superuser
         displayName: Super User
         userType: SUPER_USER

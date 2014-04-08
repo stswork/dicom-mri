@@ -6,7 +6,7 @@
     @if(u.getUserType.equalsIgnoreCase("SUPER_USER")) {
     <li><a href="@controllers.loginPic.routes.LoginPicController.save(0)"><span class="meta">Change Login Screen Picture</span><br />
         Change</a></li>
-    <li><a href="@controllers.user.routes.UserController.save(0)"><span class="meta">New User?</span><br />
+    <li><a href="@controllers.user.routes.UserController.getUser()"><span class="meta">New User?</span><br />
         Add</a></li>
     }
     <li><a href="@controllers.review.routes.ReviewController.getPatientsReviewed()"><span class="meta">Old patient data</span><br />

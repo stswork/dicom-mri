@@ -37,7 +37,7 @@ public class UserController extends Controller {
             return redirect(controllers.routes.AuthenticationController.login());
         userList = Ebean.find(User.class).findList();
 
-        return ok(views.html.user.list.render("Members",u,userList));
+        return ok(views.html.user.list.render("Members", u, userList));
     }
 
     @With(Authenticated.class)

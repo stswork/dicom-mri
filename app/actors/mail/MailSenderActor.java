@@ -8,7 +8,7 @@ import play.Play;
 
 public class MailSenderActor extends UntypedActor {
 
-    private final static String FEEDBACK_EMAIL_SUBJECT = "New Patient Details";
+    private final static String FEEDBACK_EMAIL_SUBJECT = "Telestroke : Please review MRI Scan";
     private final static String TELESTROKE_FEEDBACK_FROM = "Telestroke <info@telestroke.com>";
 
 

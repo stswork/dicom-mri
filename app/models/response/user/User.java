@@ -12,6 +12,8 @@ public class User {
     public String userName;
     public String displayName;
     public String userType;
+    public String location;
+    public String phone;
 
     public User() {
     }
@@ -21,6 +23,15 @@ public class User {
         this.userName = userName;
         this.displayName = displayName;
         this.userType = userType;
+    }
+
+    public User(long id, String userName, String displayName, String userType, String location, String phone) {
+        this.id = id;
+        this.userName = userName;
+        this.displayName = displayName;
+        this.userType = userType;
+        this.location = location;
+        this.phone = phone;
     }
 
     public long getId() {
@@ -53,5 +64,21 @@ public class User {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

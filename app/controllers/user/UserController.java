@@ -72,8 +72,9 @@ public class UserController extends Controller {
         String password=StringUtils.isEmpty(map.get("password")[0]) ? StringUtils.EMPTY : map.get("password")[0];
         String displayName=StringUtils.isEmpty(map.get("displayName")[0]) ? StringUtils.EMPTY : map.get("displayName")[0];
         String userType=StringUtils.isEmpty(map.get("userType")[0]) ? StringUtils.EMPTY : map.get("userType")[0];
-
-        user=new User(userName,password,displayName,UserType.valueOf(userType));
+        String location=StringUtils.isEmpty(map.get("location")[0]) ? StringUtils.EMPTY : map.get("location")[0];
+        String phone=StringUtils.isEmpty(map.get("phone")[0]) ? StringUtils.EMPTY : map.get("phone")[0];
+        user=new User(userName,password,displayName,UserType.valueOf(userType),location,phone);
         /*user.setUserName(userName);
         user.setPassword(password);
         user.setDisplayName(displayName);

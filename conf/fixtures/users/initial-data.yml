@@ -5,6 +5,8 @@ users:
         password: superuser
         displayName: Super User
         userType: SUPER_USER
+        location: Thane
+        phone: 9029720294
         createdBy: !!models.user.User
                     id: 1
 
@@ -13,6 +15,8 @@ users:
         password: shantanu
         displayName: Dr Shantanu
         userType: DOCTOR
+        location: Thane
+        phone: 9029234294
         createdBy: !!models.user.User
                     id: 1
 
@@ -21,6 +25,8 @@ users:
         password: sagar
         displayName: Dr Sagar
         userType: DOCTOR
+        location: Thane
+        phone: 902923444
         createdBy: !!models.user.User
                     id: 1
 
@@ -29,6 +35,8 @@ users:
         password: anupam
         displayName: Dr Anupam
         userType: DOCTOR
+        location: Thane
+        phone: 902923423
         createdBy: !!models.user.User
                     id: 1
 
@@ -37,6 +45,8 @@ users:
             password: shubho
             displayName: Dr Shubho
             userType: DOCTOR
+            location: Thane
+            phone: 902234234
             createdBy: !!models.user.User
                         id: 1
 
@@ -45,5 +55,7 @@ users:
         password: nilesh
         displayName: Nilesh Satpute
         userType: MRI_SCAN_CENTER
+        location: Thane
+        phone: 902954654
         createdBy: !!models.user.User
                     id: 1

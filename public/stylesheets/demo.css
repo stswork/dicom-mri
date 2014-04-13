@@ -40,7 +40,8 @@ header{
 /* General Demo Style */
 body{
 	font-family: Cambria, Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
-	background:url(../images/bgnoise_lg.png);
+	/*background:url(../images/bgnoise_lg.png);*/
+	background-color: #F7F7F7;
 	font-weight: 400;
 	font-size: 15px;
 	color: #3a2127;

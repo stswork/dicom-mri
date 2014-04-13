@@ -21,7 +21,7 @@ import play.mvc.With;
 public class AuthenticationController extends Controller {
 
     public static Result login() {
-        Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
+        /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
             if(l == null) {
                 String _url = controllers.routes.Assets.at("images/mri.jpeg").absoluteURL(request());
@@ -32,7 +32,8 @@ public class AuthenticationController extends Controller {
             }
         } else {
             return redirect(controllers.review.routes.ReviewController.getPatientsToReview());
-        }
+        }*/
+        return ok(views.html.index.render("Welcome"));
     }
 
     @BodyParser.Of(BodyParser.Json.class)

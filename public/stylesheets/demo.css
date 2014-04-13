@@ -22,7 +22,8 @@ img {
 }
 address,caption,cite,code,dfn,th,var {
 	font-style:normal;
-	font-weight:normal;
+	color: #257CC0;
+    font-weight: bold
 }
 ol,ul {
 	list-style:none;

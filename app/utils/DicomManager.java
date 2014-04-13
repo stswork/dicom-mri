@@ -133,13 +133,13 @@ public class DicomManager {
         }
     }
 
-    public static String writeJpegToS3(File jpegFile) {
+    public static String writeJpegToS3(File jpegFile,String extension) {
         try {
             String tempDir = System.getProperty("user.home");
             String separator = File.separator;
             File jFile = new File(tempDir + separator + jpegFile.getName() + new DateTime().millisOfDay() + ".jpg");
             BufferedImage bufferedImage = ImageIO.read(jpegFile);
-            ImageIO.write(bufferedImage, "jpeg", jFile);
+            ImageIO.write(bufferedImage, extension , jFile);
             S3File s3File = new S3File(UUID.randomUUID(), jFile.getName(), jFile);
             s3File.save();
             jFile.delete();

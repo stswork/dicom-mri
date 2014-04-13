@@ -156,9 +156,9 @@ public class PatientController extends Controller {
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
-                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg")) {
+                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg") ||  StringUtils.equalsIgnoreCase(_extension, "png")||  StringUtils.equalsIgnoreCase(_extension, "bmp")) {
                     file = fp.getFile();
-                    String _s3Url = DicomManager.writeJpegToS3(file);
+                    String _s3Url = DicomManager.writeJpegToS3(file,_extension);
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);

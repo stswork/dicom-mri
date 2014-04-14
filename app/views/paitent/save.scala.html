@@ -110,8 +110,51 @@
                     }
 
                     <tr>
-                        <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
-                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2" multiple="multiple"></td>
+                        <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi" onChange="makeFileList();"></td>
+                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2" multiple="multiple" onChange="makeFileListJpg();"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ul id="fileList"><li>No Files Selected</li></ul>
+
+                            <script type="text/javascript">
+                                function makeFileList() {
+                                var input = document.getElementById("dicomToJpegFC");
+                                var ul = document.getElementById("fileList");
+                                while (ul.hasChildNodes()) {
+                                ul.removeChild(ul.firstChild);
+                                }
+                                for (var i = 0; i < input.files.length; i++) {
+                                var li = document.createElement("li");
+                                li.innerHTML = input.files[i].name;
+                                ul.appendChild(li);
+                                }
+                                if(!ul.hasChildNodes()) {
+                                var li = document.createElement("li");
+                                li.innerHTML = 'No Files Selected';
+                                ul.appendChild(li);
+                                }
+                                }
+
+                                function makeFileListJpg() {
+                                var input = document.getElementById("jpegFC");
+                                var ul = document.getElementById("fileList");
+                                while (ul.hasChildNodes()) {
+                                ul.removeChild(ul.firstChild);
+                                }
+                                for (var i = 0; i < input.files.length; i++) {
+                                var li = document.createElement("li");
+                                li.innerHTML = input.files[i].name;
+                                ul.appendChild(li);
+                                }
+                                if(!ul.hasChildNodes()) {
+                                var li = document.createElement("li");
+                                li.innerHTML = 'No Files Selected';
+                                ul.appendChild(li);
+                                }
+                                }
+                            </script>
+                        </td>
                     </tr>
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {

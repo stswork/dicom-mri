@@ -149,50 +149,21 @@
                    e.preventDefault();
                    var _uri = $(e.currentTarget).data().href;
                    var _id = $(e.currentTarget).data().id;
-                   $("#disable-dialog").dialog({
-                    resizable: false,
-                    dialogClass: "no-close",
-                    closeOnEscape: "true",
-                    show: {
-                        effect: "fade",
-                        duration: 500
-                    },
-                    hide: {
-                        effect: "fade",
-                        duration: 500
-                    },
-                    buttons: [
-                        {
-                            text: "YES",
-                            width: 100,
-                            class: 'btn btn-warning',
-                            click: function() {
-                                $.ajax({
-                                    type: "POST",
-                                    url: _uri,
-                                    data: "id=" + _id,
-                                    success: function(e) {
-                                        window.location='/review/list';
-                                    },
-                                    error: function(jqXHR, textStatus, errorThrown) {
-                                        console.log(errorThrown);
-                                    },
-                                    dataType: "json"
-                                });
-                            }
-                        },
-                        {
-                            text: "NO",
-                            width: 100,
-                            class: 'btn',
-                            click: function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }
-                    ]
+                   console.log(_uri);
+                   console.log(_id);
+                    $.ajax({
+                            type: "POST",
+                            url: _uri,
+                            data: "id=" + _id,
+                            success: function(e) {
+                                window.location='/unreviewed';
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(errorThrown);
+                            },
+                            dataType: "json"
+                        });
                     });
-                    console.log(e);
-            });
     });
 </script>
 <!-- Table goes in the document BODY -->

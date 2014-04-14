@@ -74,7 +74,7 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
-        return ok(views.html.paitent.step1.render("Patient", u, users, r));
+        return ok(views.html.patient.step1.render("Patient", u, users, r));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.
@@ -297,7 +297,7 @@ public class PatientController extends Controller {
             reviews.add(review);
         }
         String _message = "Patient successfully added!";
-        return ok(views.html.review.list.render("Data list", u, reviews, _message));
+        return ok(views.html.patient.step2.render("Data list", u, a.getId()));
     }
 
     @Transactional
@@ -307,6 +307,13 @@ public class PatientController extends Controller {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
+        Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
+
+        Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
+        Album a = Album.find.byId(albumId);
+        if(a == null)
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
+
         List<Http.MultipartFormData.FilePart> fps;
         try {
             //GETTING LIST OF FILES FROM MULTIPART FORM
@@ -356,6 +363,6 @@ public class PatientController extends Controller {
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }
-        return ok(Json.toJson(new ResponseMessage(200, "Files added successfully", ResponseMessageType.SUCCESSFUL)));
+        return redirect(controllers.patient.routes.PatientController.save(0));
     }
 }

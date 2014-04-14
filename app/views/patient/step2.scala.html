@@ -13,10 +13,14 @@
             }
         </header>
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
-            <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="#" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+            <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.stepTwo()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+                <input type="hidden" value="@albumId" name="albumId" id="albumId"/>
                 <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
                     <tr>
-                        <td colspan="2"><p class="contact"><label for="name">SELECT FILES :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                        <td colspan="2"><p class="contact"><label for="name">SELECT FILES :</label></p><br/><br/><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                    </tr>
+                    <tr>
+                        <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
                     </tr>
                 </table>
             </form>

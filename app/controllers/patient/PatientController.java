@@ -76,7 +76,13 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
-        return ok(views.html.patient.step1.render("Patient", u, users, r));
+        List<Comment> comments = r.getAlbum().getCommentList();
+        StringBuilder sb = new StringBuilder();
+        for(Comment c: comments){
+            if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
+                sb.append(c.getMessage());
+        }
+        return ok(views.html.patient.step1.render("Patient", u, users, r, sb.toString()));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.

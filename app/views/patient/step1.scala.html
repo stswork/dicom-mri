@@ -1,4 +1,4 @@
-@(message: String, u: models.response.user.User, user: List[models.user.User], review: models.review.Review)
+@(message: String, u: models.response.user.User, user: List[models.user.User], review: models.review.Review, mriComment: String)
 @import tags._
 @main("Patient") {
 <div id="wrapper" class="container_12 clearfix">
@@ -87,8 +87,8 @@
 
                     <tr>
                         <td><p class="contact"><label for="comment">MRI SCAN Comments :</label></p></td>
-                        @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
-                             <td colspan="5"><input type="textarea" id="comment" name="comment" value="" placeholder="Please enter your comments"  rows="4" cols="50" disabled/></td>
+                        @if(!mriComment.equals("")) {
+                             <td colspan="5"><input type="textarea" id="comment" name="comment" value="@mriComment" placeholder="Please enter your comments"  rows="4" cols="50" disabled/></td>
                         } else {
                             <td colspan="5"><input type="textarea" id="comment" name="comment" value="" placeholder="Please enter your comments"  rows="4" cols="50"/></td>
                         }

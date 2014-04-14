@@ -77,7 +77,7 @@
                             }
                             @if(!u.getUserType().toUpperCase().equalsIgnoreCase("DOCTOR")) {
                             <td><a href="/patient/@r.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
-                            <td><a class="disable" data-href="@controllers.review.routes.ReviewController.disable()" data-id="@r.getId()"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>
+                            <td><a class="disable" data-href="@controllers.review.routes.ReviewController.disable()" data-id="@r.getId()"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;cursor: pointer;" alt="Delete" title="Delete"></a></td>
                             }
                         </tr>
                     }

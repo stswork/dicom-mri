@@ -2,12 +2,14 @@ package controllers.patient;
 
 import actions.Authenticated;
 import actors.mail.MailSenderActor;
+import actors.messaging.exotel.SendSmsActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
+import models.actor.messaging.exotel.SendSmsActorMessage;
 import models.amazon.s3.S3File;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
@@ -238,6 +240,12 @@ public class PatientController extends Controller {
                     }
                 }
                 try {
+                    //SENDING REGISTRATION SMS
+                    String exotelSmsBody = "Hi, " + user.getDisplayName() + "\nNew Patient added \n Name: " + p.getFullName() + "\n Click on Url: www.telestroke.in";
+                    SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
+                    ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
+                    ssa.tell(ssam, ssa);
+
                     //SENDING EMAIL
                     Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone());
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));

@@ -2,14 +2,12 @@ package controllers.patient;
 
 import actions.Authenticated;
 import actors.mail.MailSenderActor;
-import actors.messaging.exotel.SendSmsActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
-import models.actor.messaging.exotel.SendSmsActorMessage;
 import models.amazon.s3.S3File;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
@@ -76,7 +74,7 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
-        return ok(views.html.paitent.step1.render("Patient", u, users, r));
+        return ok(views.html.patient.step1.render("Patient", u, users, r));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.
@@ -84,16 +82,14 @@ public class PatientController extends Controller {
     @Transactional
     @With(Authenticated.class)
     public static Result stepOne() {
-
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         List<Http.MultipartFormData.FilePart> fps;
         Album a = null;
         Comment c = null;
-        List<Long> doctorIds = new ArrayList<Long>();
         Patient p;
-        Http.MultipartFormData fd = request().body().asMultipartFormData();
-        Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
+        //Http.MultipartFormData fd = request().body().asMultipartFormData();
+        Map<String, String[]> map = request().body().asFormUrlEncoded();
         Long id = Long.valueOf(StringUtils.isEmpty(map.get("id")[0]) ? "0" : map.get("id")[0]);
         Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
         String fullName = StringUtils.isEmpty(map.get("fullName")[0]) ? StringUtils.EMPTY : map.get("fullName")[0];
@@ -115,11 +111,11 @@ public class PatientController extends Controller {
         }*/
 
         if(id <= 0) {
-            //GETTING LIST OF FILES FROM MULTIPART FORM
+            /*//GETTING LIST OF FILES FROM MULTIPART FORM
             fps = fd.getFiles();
             if(fps.size() <= 0 || fps == null)
                 return badRequest(Json.toJson(new ResponseMessage(400, "Invalid form submission!", ResponseMessageType.BAD_REQUEST)));
-
+*/
             //SAVING PATIENT
             p = new Patient(fullName, email, age);
             p.setCreatedBy(loggedInUser);
@@ -136,7 +132,7 @@ public class PatientController extends Controller {
             a.setCreatedBy(loggedInUser);
             a.save();
 
-            //SAVING IMAGES
+            /*//SAVING IMAGES
             for(Http.MultipartFormData.FilePart fp : fps) {
                 File file = null;
                 Image i = null;
@@ -169,13 +165,13 @@ public class PatientController extends Controller {
                 try {
                     i.setCreatedBy(loggedInUser);
                     i.save();
-                    /*if(!file1.exists())
+                    *//*if(!file1.exists())
                         file1.createNewFile();
-                    TelestrokeWebService.uploadFile(file1, i.getId());*/
+                    TelestrokeWebService.uploadFile(file1, i.getId());*//*
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
             c = new Comment(comment, a, loggedInUser);
             c.setCreatedBy(loggedInUser);
             c.save();
@@ -240,12 +236,6 @@ public class PatientController extends Controller {
                     }
                 }
                 try {
-                    //SENDING REGISTRATION SMS
-                    String exotelSmsBody = "Hi, " + user.getDisplayName() + "\nNew Patient added \n Name: " + p.getFullName() + "\n Click on Url: www.telestroke.in";
-                    SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
-                    ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
-                    ssa.tell(ssam, ssa);
-
                     //SENDING EMAIL
                     Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone());
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
@@ -307,13 +297,72 @@ public class PatientController extends Controller {
             reviews.add(review);
         }
         String _message = "Patient successfully added!";
-        return ok(views.html.review.list.render("Data list", u, reviews, _message));
+        return ok(views.html.patient.step2.render("Data list", u, a.getId()));
     }
 
     @Transactional
     @With(Authenticated.class)
     public static Result stepTwo() {
 
-        return ok(Json.toJson(new ResponseMessage(200, "Files added successfully", ResponseMessageType.SUCCESSFUL)));
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        User loggedInUser = User.find.byId(u.getId());
+        Http.MultipartFormData fd = request().body().asMultipartFormData();
+        Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
+
+        Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
+        Album a = Album.find.byId(albumId);
+        if(a == null)
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
+
+        List<Http.MultipartFormData.FilePart> fps;
+        try {
+            //GETTING LIST OF FILES FROM MULTIPART FORM
+            fps = fd.getFiles();
+            if(fps.size() <= 0 || fps == null)
+                return badRequest(Json.toJson(new ResponseMessage(400, "Invalid form submission!", ResponseMessageType.BAD_REQUEST)));
+            //SAVING IMAGES
+            for(Http.MultipartFormData.FilePart fp : fps) {
+                File file = null;
+                Image i = null;
+
+                //CHECKING IF FILE HAS VALID EXTENSION
+                boolean _validFile = FileExtensionCheckUtil.isValidFile(fp.getFilename());
+                if(!_validFile)
+                    return badRequest(Json.toJson(new ResponseMessage(400, "Invalid file submission!", ResponseMessageType.BAD_REQUEST)));
+                String _extension = FileExtensionCheckUtil.getFileExtension(fp.getFilename());
+
+                //SAVING FILE TO AMAZON S3 BUCKET
+                if(StringUtils.equalsIgnoreCase(_extension, "dcm")){
+                    file = fp.getFile();
+                    BufferedImage jpegImage = DicomManager.getJpegFromDicom(file);
+                    if(jpegImage == null)
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                    String _s3Url = DicomManager.writeDicomJpegToS3(jpegImage, file.getName());
+                    if(StringUtils.isEmpty(_s3Url))
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                    i = new Image(_s3Url, a);
+                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg") ||  StringUtils.equalsIgnoreCase(_extension, "png")||  StringUtils.equalsIgnoreCase(_extension, "bmp")) {
+                    file = fp.getFile();
+                    String _s3Url = DicomManager.writeJpegToS3(file,_extension);
+                    if(StringUtils.isEmpty(_s3Url))
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                    i = new Image(_s3Url, a);
+                } else {
+                    return badRequest(Json.toJson(new ResponseMessage(400, "Invalid file submission!", ResponseMessageType.BAD_REQUEST)));
+                }
+                try {
+                    i.setCreatedBy(loggedInUser);
+                    i.save();
+                    /*if(!file1.exists())
+                        file1.createNewFile();
+                    TelestrokeWebService.uploadFile(file1, i.getId());*/
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+        return redirect(controllers.patient.routes.PatientController.save(0));
     }
 }

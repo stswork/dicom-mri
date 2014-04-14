@@ -31,7 +31,6 @@ public class CommentController extends Controller {
 
         Comment c = null;
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-
         User loggedInUser = User.find.byId(u.getId());
         Map<String, String[]> map = request().body().asFormUrlEncoded();
         String message = StringUtils.isEmpty(map.get("message")[0]) ? StringUtils.EMPTY : map.get("message")[0];

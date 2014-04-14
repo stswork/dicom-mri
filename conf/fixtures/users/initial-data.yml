@@ -1,7 +1,7 @@
 # USERS
 users:
     - !!models.user.User
-        userName: superuser@telestroke.in
+        userName: superuser@telestroke.com
         password: superuser
         displayName: Super User
         userType: SUPER_USER
@@ -11,7 +11,7 @@ users:
                     id: 1
 
     - !!models.user.User
-        userName: shantanu@telestroke.in
+        userName: shantanu@telestroke.com
         password: shantanu
         displayName: Dr Shantanu
         userType: DOCTOR
@@ -21,7 +21,7 @@ users:
                     id: 1
 
     - !!models.user.User
-        userName: sagar@telestroke.in
+        userName: sagar@telestroke.com
         password: sagar
         displayName: Dr Sagar
         userType: DOCTOR
@@ -31,7 +31,7 @@ users:
                     id: 1
 
     - !!models.user.User
-        userName: anupam@telestroke.in
+        userName: anupam@telestroke.com
         password: anupam
         displayName: Dr Anupam
         userType: DOCTOR
@@ -46,7 +46,7 @@ users:
             displayName: Dr Shubho
             userType: DOCTOR
             location: Thane
-            phone: 9029720294
+            phone: 902234234
             createdBy: !!models.user.User
                         id: 1
 

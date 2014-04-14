@@ -172,7 +172,8 @@ public class ReviewController extends Controller {
     @With(Authenticated.class)
     public static Result disable(){
         Long id = 0L;
-        User u = (User) ctx().args.get("user");
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        User loggedInUser = User.find.byId(u.getId());
         try {
             id = Long.parseLong(request().body().asFormUrlEncoded().get("id")[0]);
         } catch(Exception e) {
@@ -182,7 +183,7 @@ public class ReviewController extends Controller {
         if(r == null)
             return notFound(Json.toJson(new ResponseMessage(404, "No such review found.", ResponseMessageType.NOT_FOUND)));
         r.setStatus(models.Status.DISABLED);
-        r.setModifiedBy(u);
+        r.setModifiedBy(loggedInUser);
         r.update();
         return ok(Json.toJson(new ResponseMessage(200, "Deleted successfully!", ResponseMessageType.SUCCESSFUL)));
     }

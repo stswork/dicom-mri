@@ -35,6 +35,6 @@ public class Application extends Controller {
         List<User> user= Ebean.find(User.class).where(Expr.eq("userType", UserType.DOCTOR)).findList();
         Patient patient = Patient.find.byId((long)121);
 
-        return ok(views.html.paitent.save.render("Patient", user, patient));
+        return ok(views.html.patient.save.render("Patient", user, patient));
     }*/
 }

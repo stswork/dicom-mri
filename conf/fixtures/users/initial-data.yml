@@ -41,14 +41,14 @@ users:
                     id: 1
 
     - !!models.user.User
-            userName: shubho.pramanik@gmail.com
-            password: shubho
-            displayName: Dr Shubho
-            userType: DOCTOR
-            location: Thane
-            phone: 902234234
-            createdBy: !!models.user.User
-                        id: 1
+        userName: shubho.pramanik@gmail.com
+        password: shubho
+        displayName: Dr Shubho
+        userType: DOCTOR
+        location: Thane
+        phone: 9029720294
+        createdBy: !!models.user.User
+                    id: 1
 
     - !!models.user.User
         userName: nilesh@telestroke.com
@@ -56,6 +56,6 @@ users:
         displayName: Nilesh Satpute
         userType: MRI_SCAN_CENTER
         location: Thane
-        phone: 902954654
+        phone: 9029720294
         createdBy: !!models.user.User
                     id: 1

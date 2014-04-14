@@ -1,0 +1,29 @@
+@(message: String, u: models.response.user.User, albumId: Long)
+@import tags._
+@main("Patient") {
+<div id="wrapper" class="container_12 clearfix">
+    <!-- Header -->
+    @header(u)
+    <div class="container">
+        <header>
+            @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+            <h1><span>MRI SCAN</span> SELECT FILES</h1>
+            } else {
+            <h1><!--<span></span>--> Patient Details</h1>
+            }
+        </header>
+        <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
+            <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="#" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+                <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
+                    <tr>
+                        <td colspan="2"><p class="contact"><label for="name">SELECT FILES :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    @footer()
+</div>
+} {
+}

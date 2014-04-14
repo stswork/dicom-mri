@@ -20,6 +20,8 @@
                         <th>User Name</th>
                         <th>Display Name</th>
                         <th>User Type</th>
+                        <th>Location</th>
+                        <th>Phone</th>
                        <!-- <th>Edit</th>
                         <th>Delete</th>
 -->
@@ -28,9 +30,11 @@
                     @for(ur <- user) {
                     <tr>
                         <!--   <td>@(i+=1)</td>-->
-                        <td><a href="/user/@ur.getId()">@ur.getUserName()</a></td>
+                        <td><a href="#">@ur.getUserName()</a></td>   <!--/user/@ur.getId()-->
                         <td>@ur.getDisplayName()</td>
                         <td>@ur.getUserType().toString()</td>
+                        <td>@ur.getLocation().toString()</td>
+                        <td>@ur.getPhone().toString()</td>
                        <!-- <td><a href="/user/@ur.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
                         <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>-->
                     </tr>

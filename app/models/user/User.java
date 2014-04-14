@@ -37,6 +37,12 @@ public class User extends Model {
     @OneToMany(mappedBy = "assignedTo")
     private List<Review> reviewList = new ArrayList<Review>();
 
+    @Constraints.Required
+    private String location;
+
+    @Constraints.Required
+    private String phone;
+
     @OneToOne
     private User createdBy;
 
@@ -51,6 +57,31 @@ public class User extends Model {
         this.password = password;
         this.displayName = displayName;
         this.userType = userType;
+    }
+
+    public User(String userName, String password, String displayName, UserType userType, String location, String phone) {
+        this.userName = userName;
+        this.password = password;
+        this.displayName = displayName;
+        this.userType = userType;
+        this.location = location;
+        this.phone = phone;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Long getId() {

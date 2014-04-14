@@ -17,24 +17,25 @@ GET         /logout                  controllers.AuthenticationController.logout
 
 # PATIENT
 GET         /patient/:id             controllers.patient.PatientController.save(id: Long)
-POST        /patient                 controllers.patient.PatientController.handleSave()
+POST        /patient/one             controllers.patient.PatientController.stepOne()
+POST        /patient/two             controllers.patient.PatientController.stepTwo()
 
 # ALBUM
 POST        /album/image/remove      controllers.album.AlbumController.removeImage()
 
 # REVIEW
-GET         /list                    controllers.review.ReviewController.getPatientsToReview()
+GET         /unreviewed              controllers.review.ReviewController.getPatientsToReview()
 GET         /reviewed                controllers.review.ReviewController.getPatientsReviewed()
-POST        /review                  controllers.review.ReviewController.review()
+POST        /review/disable          controllers.review.ReviewController.disable()
 
 # COMMENT
 POST        /comment                 controllers.comment.CommentController.handleSave()
 
-# Admin
+# ADMIN
 GET         /loginpic                controllers.loginPic.LoginPicController.save(id: Long ?= 0)
 POST        /loginpic                controllers.loginPic.LoginPicController.handleSave()
 
-#User
+# USER
 GET         /userList                controllers.user.UserController.getUser()
 GET         /user                    controllers.user.UserController.save(id: Long ?= 0)
 POST        /user                    controllers.user.UserController.handleSave()

@@ -3,8 +3,6 @@ package models.response.review;
 import models.response.album.Album;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.sql.Timestamp;
-
 /**
  * Created by Sagar Gopale on 3/11/14.
  */
@@ -20,12 +18,12 @@ public class Review {
     public String age;
     public String gender;
     public Album album;
-    public Timestamp created;
+    public String created;
 
     public Review() {
     }
 
-    public Review(Long id, Long assignedToId, String assignedToName, Long patientId, String patientName, String email, String age, String gender, Album album, Timestamp created) {
+    public Review(Long id, Long assignedToId, String assignedToName, Long patientId, String patientName, String email, String age, String gender, Album album, String created) {
         this.id = id;
         this.assignedToId = assignedToId;
         this.assignedToName = assignedToName;
@@ -102,11 +100,11 @@ public class Review {
         this.gender = gender;
     }
 
-    public Timestamp getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Timestamp created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 

@@ -22,6 +22,8 @@ import models.response.ResponseMessageType;
 import models.user.User;
 import models.user.UserType;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import play.Logger;
 import play.data.Form;
 import play.libs.Akka;
@@ -45,6 +47,8 @@ import java.util.UUID;
  * Created by Sagar Gopale on 3/8/14.
  */
 public class PatientController extends Controller {
+
+    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
 
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
     @Transactional
@@ -70,20 +74,14 @@ public class PatientController extends Controller {
         ).findList();
         if(r == null)
             r = new Review();
-        else {
-            if(UserType.valueOf(u.getUserType()).equals(UserType.DOCTOR)) {
-                r.setReviewed(true);
-                r.update();
-            }
-        }
-        return ok(views.html.paitent.save.render("Patient", u, users, r));
+        return ok(views.html.paitent.step1.render("Patient", u, users, r));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.
     // To remove a particular image from a edit patient screen a separate call to remove image is created in AlbumController.
     @Transactional
     @With(Authenticated.class)
-    public static Result handleSave() {
+    public static Result stepOne() {
 
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
@@ -157,9 +155,9 @@ public class PatientController extends Controller {
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
-                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg")) {
+                } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg") ||  StringUtils.equalsIgnoreCase(_extension, "png")||  StringUtils.equalsIgnoreCase(_extension, "bmp")) {
                     file = fp.getFile();
-                    String _s3Url = DicomManager.writeJpegToS3(file);
+                    String _s3Url = DicomManager.writeJpegToS3(file,_extension);
                     if(StringUtils.isEmpty(_s3Url))
                         return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
@@ -241,7 +239,7 @@ public class PatientController extends Controller {
                 }
                 try {
                     //SENDING EMAIL
-                    Mail mail = new Mail(p.getFullName(), p.getEmail(), user.getDisplayName(), user.getUserName());
+                    Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone());
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {
@@ -297,7 +295,7 @@ public class PatientController extends Controller {
             review.setAge(r.getAlbum() == null || r.getAlbum().getPatient() == null || r.getAlbum().getPatient().getAge() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getAge().toString());
             review.setGender(r.getAlbum() == null || r.getAlbum().getPatient() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getGender().name());
             review.setAlbum(album);
-            review.setCreated(r.getCreated());
+            review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
         String _message = "Patient successfully added!";
@@ -305,15 +303,9 @@ public class PatientController extends Controller {
     }
 
     @Transactional
-    public static Result viewPatient() {
-        Long id = 0L;
-        User u = (User) ctx().args.get("user");
-        try {
-            id = Long.parseLong(request().body().asFormUrlEncoded().get("id")[0]);
-        } catch(Exception e) {
-            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.NOT_FOUND)));
-        }
-        //Patient p = Ebean.find(Patient.class).fetch("albumList").fetch();
-        return ok();
+    @With(Authenticated.class)
+    public static Result stepTwo() {
+
+        return ok(Json.toJson(new ResponseMessage(200, "Files added successfully", ResponseMessageType.SUCCESSFUL)));
     }
 }

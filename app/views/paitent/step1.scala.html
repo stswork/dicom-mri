@@ -14,7 +14,7 @@
             }
         </header>
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
-                <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.handleSave()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+                <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.stepOne()" data-uri="@controllers.patient.routes.PatientController.save(0)">
                     <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
 
                     <tr>
@@ -27,13 +27,21 @@
                     <tr>
                         <td><p class="contact"><label for="fullName">Patient Name :</label></p></td>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getFullName() != null) {
-                            <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text"></td>
+                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                  <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text" disabled></td>
+                             } else {
+                                 <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text"></td>
+                             }
                         } else {
                             <td><input id="fullName" name="fullName" placeholder="First and last name" required="" type="text"></td>
                         }
                         <td><p class="contact"><label for="age">Age : </label></p></td>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getAge() != null) {
-                        <td><input id="age" name="age" placeholder="Age" required="" value="@review.getAlbum().getPatient().getAge()" type="number" style="width: 50px;"></td>
+                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                <td><input id="age" name="age" placeholder="Age" required="" value="@review.getAlbum().getPatient().getAge()" type="number" style="width: 50px;" disabled></td>
+                            } else {
+                                <td><input id="age" name="age" placeholder="Age" required="" value="@review.getAlbum().getPatient().getAge()" type="number" style="width: 50px;"></td>
+                                }
                         } else {
                         <td><input id="age" name="age" placeholder="Age" required="" type="number" style="width: 50px;"></td>
                         }
@@ -41,19 +49,33 @@
                     <tr>
                         <td><p class="contact"><label for="email">Email :</label></p></td>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getEmail() != null) {
-                        <td><input id="email" name="email" placeholder="example@@domain.com" value="@review.getAlbum().getPatient().getEmail()" required="" type="email"></td>
+                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                <td><input id="email" name="email" placeholder="example@@domain.com" value="@review.getAlbum().getPatient().getEmail()" required="" type="email" disabled></td>
+                            } else {
+                                <td><input id="email" name="email" placeholder="example@@domain.com" value="@review.getAlbum().getPatient().getEmail()" required="" type="email"></td>
+                            }
                         } else {
                         <td><input id="email" name="email" placeholder="example@@domain.com" required="" type="email"></td>
                         }
                         <td><p class="contact"><label for="gender">Gender:</label></p></td>
                         <td><select class="select-style gender" required="required" name="gender" style="width: 130px;">
                             @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getGender().name().toUpperCase() == "MALE"){
-                                <option value="MALE" selected="selected">MALE</option>
-                                <option value="FEMALE" >FEMALE</option>
+                                @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                    <option value="MALE" selected="selected" disabled>MALE</option>
+                                    <option value="FEMALE" >FEMALE</option>
+                                } else {
+                                    <option value="MALE" selected="selected">MALE</option>
+                                    <option value="FEMALE" >FEMALE</option>
+                                }
                             }
                             @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getGender().name().toUpperCase() == "FEMALE"){
-                                <option value="MALE" >MALE</option>
-                                <option value="FEMALE" selected="selected">FEMALE</option>
+                                @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                    <option value="MALE" >MALE</option>
+                                    <option value="FEMALE" selected="selected" disabled>FEMALE</option>
+                                } else {
+                                    <option value="MALE" >MALE</option>
+                                    <option value="FEMALE" selected="selected">FEMALE</option>
+                                }
                             }
                             @if(review.getAlbum() == null || review.getAlbum().getPatient() == null || review.getAlbum().getPatient().getGender() == null) {
                                 <option value="MALE" >MALE</option>
@@ -64,8 +86,12 @@
                     </tr>
 
                     <tr>
-                        <td><p class="contact"><label for="comment">Comments :</label></p></td>
+                        <td><p class="contact"><label for="comment">MRI SCAN Comments :</label></p></td>
+                        @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
+                             <td colspan="5"><input type="textarea" id="comment" name="comment" value="" placeholder="Please enter your comments"  rows="4" cols="50" disabled/></td>
+                        } else {
                         <td colspan="5"><input type="textarea" id="comment" name="comment" value="" placeholder="Please enter your comments"  rows="4" cols="50"/></td>
+                        }
                     </tr>
 
                     @if(review.getAlbum() == null){
@@ -78,15 +104,15 @@
                             </select>
                         </td>
                         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
-                        <td><input class="button" name="submit" id="submit" value="Save" type="submit"></td>
+                        <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
                         }
                     </tr>
                     }
 
-                    <tr>
+                    <!--<tr>
                         <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
-                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2"></td>
-                    </tr>
+                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2" multiple="multiple"></td>
+                    </tr>-->
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="@review.getAlbum().getId()">
@@ -116,14 +142,11 @@
                         <td><p class="contact"><label for="comment">Doctor Comments :</label></p></td>
                         <td colspan="5"><input type="textarea" id="message" name="message" value="" placeholder="Please enter your comments" rows="4" cols="50"/></td>
 
-                        <td><input class="button" name="submit" id="submit" value="Post Comment" type="submit"></td>
+                        <td><button class="button" name="submit" id="submit" value="Post Comment">Post Comment</button></td>
                     </tr>
                 </table>
             </form>
             }
-
-
-
         </div>
         <div class="form" style="width: 100%;background: #f1f1f1;border-radius: 25px;margin-top: 35px;">
         <table style="clear: both;float: left;" cellspacing="0">

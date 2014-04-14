@@ -63,6 +63,8 @@ create table review (
   created                   timestamp,
   created_by_id             bigint,
   modified_by_id            bigint,
+  status                    integer,
+  constraint ck_review_status check (status in (0,1,2)),
   constraint pk_review primary key (id))
 ;
 
@@ -79,6 +81,8 @@ create table o_user (
   password                  varchar(255),
   display_name              varchar(255),
   user_type                 integer,
+  location                  varchar(255),
+  phone                     varchar(255),
   created_by_id             bigint,
   modified_by_id            bigint,
   constraint ck_o_user_user_type check (user_type in (0,1,2)),

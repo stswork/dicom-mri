@@ -1,5 +1,6 @@
 package models.review;
 
+import models.Status;
 import models.album.Album;
 import models.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,6 +41,8 @@ public class Review extends Model {
 
     @OneToOne
     private User modifiedBy;
+
+    private Status status = Status.ACTIVE;
 
     public Review() {
     }
@@ -108,5 +111,13 @@ public class Review extends Model {
 
     public void setModifiedBy(User modifiedBy) {
         this.modifiedBy = modifiedBy;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -1,5 +1,7 @@
 package models.actor.mailer;
 
+import models.patient.Gender;
+
 /**
  * Created with IntelliJ IDEA.
  * User: user
@@ -11,8 +13,13 @@ public class Mail {
 
     private String pName;
     private String pEmail;
+    private Integer pAge;
+    private Gender pGender;
     private String dName;
     private String dEmail;
+    private String mName;
+    private String mLocation;
+    private String mPhone;
     private String logoUri;
     private String tagUri;
     private String contentBoxUri;
@@ -25,6 +32,34 @@ public class Mail {
         this.pEmail = pEmail;
         this.dName = dName;
         this.dEmail = dEmail;
+    }
+
+    public Mail(String pName, String pEmail, Integer pAge, Gender pGender, String dName, String dEmail, String mName, String mLocation, String mPhone) {
+        this.pName = pName;
+        this.pEmail = pEmail;
+        this.pAge = pAge;
+        this.pGender = pGender;
+        this.dName = dName;
+        this.dEmail = dEmail;
+        this.mName = mName;
+        this.mLocation = mLocation;
+        this.mPhone = mPhone;
+    }
+
+    public Integer getpAge() {
+        return pAge;
+    }
+
+    public void setpAge(Integer pAge) {
+        this.pAge = pAge;
+    }
+
+    public Gender getpGender() {
+        return pGender;
+    }
+
+    public void setpGender(Gender pGender) {
+        this.pGender = pGender;
     }
 
     public String getpName() {
@@ -81,6 +116,30 @@ public class Mail {
 
     public void setContentBoxUri(String contentBoxUri) {
         this.contentBoxUri = contentBoxUri;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public String getmLocation() {
+        return mLocation;
+    }
+
+    public void setmLocation(String mLocation) {
+        this.mLocation = mLocation;
+    }
+
+    public String getmPhone() {
+        return mPhone;
+    }
+
+    public void setmPhone(String mPhone) {
+        this.mPhone = mPhone;
     }
 }
 

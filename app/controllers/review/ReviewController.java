@@ -5,6 +5,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
+import models.Status;
 import models.album.Image;
 import models.response.album.Album;
 import models.response.comment.Comment;
@@ -14,6 +15,9 @@ import models.response.ResponseMessageType;
 import models.user.User;
 import models.user.UserType;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -26,6 +30,8 @@ import java.util.List;
  * Created by Sagar Gopale on 3/9/14.
  */
 public class ReviewController extends Controller {
+
+    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
 
     @Transactional
     @With(Authenticated.class)
@@ -43,7 +49,10 @@ public class ReviewController extends Controller {
                                     Expr.eq("assignedTo.id", u.getId()),
                                     Expr.eq("createdBy.id", u.getId())
                             ),
-                            Expr.eq("reviewed", false)
+                            Expr.and(
+                                    Expr.eq("reviewed", false),
+                                    Expr.eq("status", models.Status.ACTIVE)
+                            )
                     )
             ).findList();
         }
@@ -77,7 +86,7 @@ public class ReviewController extends Controller {
             review.setAge(r.getAlbum() == null || r.getAlbum().getPatient() == null || r.getAlbum().getPatient().getAge() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getAge().toString());
             review.setGender(r.getAlbum() == null || r.getAlbum().getPatient() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getGender().name());
             review.setAlbum(album);
-            review.setCreated(r.getCreated());
+            review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
         return ok(views.html.review.list.render("Data list", u, reviews, StringUtils.EMPTY));
@@ -100,7 +109,10 @@ public class ReviewController extends Controller {
                                     Expr.eq("assignedTo.id", u.getId()),
                                     Expr.eq("createdBy.id", u.getId())
                             ),
-                            Expr.eq("reviewed", true)
+                            Expr.and(
+                                    Expr.eq("reviewed", true),
+                                    Expr.eq("status", models.Status.ACTIVE)
+                            )
                     )
             ).findList();
         }
@@ -132,13 +144,13 @@ public class ReviewController extends Controller {
             review.setAge(r.getAlbum() == null || r.getAlbum().getPatient() == null || r.getAlbum().getPatient().getAge() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getAge().toString());
             review.setGender(r.getAlbum() == null || r.getAlbum().getPatient() == null ? StringUtils.EMPTY : r.getAlbum().getPatient().getGender().name());
             review.setAlbum(album);
-            review.setCreated(r.getCreated());
+            review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
         return ok(views.html.review.list.render("Data list", u, reviews, StringUtils.EMPTY));
     }
 
-    @Transactional
+    /*@Transactional
     public static Result review() {
         Long id = 0L;
         User u = (User) ctx().args.get("user");
@@ -154,5 +166,24 @@ public class ReviewController extends Controller {
         r.setModifiedBy(u);
         r.update();
         return ok(Json.toJson(new ResponseMessage(200, "Patient successfully reviewed!", ResponseMessageType.SUCCESSFUL)));
+    }*/
+
+    @Transactional
+    @With(Authenticated.class)
+    public static Result disable(){
+        Long id = 0L;
+        User u = (User) ctx().args.get("user");
+        try {
+            id = Long.parseLong(request().body().asFormUrlEncoded().get("id")[0]);
+        } catch(Exception e) {
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.NOT_FOUND)));
+        }
+        Review r = Review.find.byId(id);
+        if(r == null)
+            return notFound(Json.toJson(new ResponseMessage(404, "No such review found.", ResponseMessageType.NOT_FOUND)));
+        r.setStatus(models.Status.DISABLED);
+        r.setModifiedBy(u);
+        r.update();
+        return ok(Json.toJson(new ResponseMessage(200, "Deleted successfully!", ResponseMessageType.SUCCESSFUL)));
     }
 }

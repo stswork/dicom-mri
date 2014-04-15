@@ -74,6 +74,32 @@ public class AuthenticationController extends Controller {
         return ok();
     }
 
+    public static Result doctorLogin(){
+        try {
+        String username=StringUtils.isEmpty(request().queryString().get("username").toString())?null:request().queryString().get("username").toString();
+        String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password").toString();
+        Long id= StringUtils.isEmpty(request().queryString().get("id").toString())?0:Long.parseLong(request().queryString().get("id").toString());
+
+        User u = null;
+        u = Ebean.find(User.class).where(
+                Expr.and(
+                        Expr.eq("userName", username),
+                        Expr.eq("password", password)
+                )
+        ).setMaxRows(1).findUnique();
+        if(u == null)
+            return notFound(Json.toJson(new ResponseMessage(404, "No such user found!", ResponseMessageType.NOT_FOUND)));
+        models.response.user.User _responseUser = new models.response.user.User(u.getId(), u.getUserName(), u.getDisplayName(), u.getUserType().name().toUpperCase());
+        session("user", StringUtils.toString(org.apache.commons.codec.binary.Base64.encodeBase64(mapper.writeValueAsString(_responseUser).getBytes()), "UTF-8"));
+        return ok(controllers.patient.routes.PatientController.save(id));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return badRequest(Json.toJson(new ResponseMessage(400, "No such user found!", ResponseMessageType.BAD_REQUEST)));
+    }
+
+    }
+
+
     public static Result logout() {
         session().clear();
         return redirect(controllers.routes.AuthenticationController.login());

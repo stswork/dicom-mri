@@ -1,64 +1,71 @@
 @(message: String)
-@import tags._
-@main("Home") {
-<div id="wrapper" class="container_12 clearfix">
 
-        <div class="container">
-            <!-- freshdesignweb top bar -->
-            <!-- Text Logo -->
-            <h1 id="logo" class="grid_4">Telestroke</h1>
-            <div class="hr grid_12 clearfix">&nbsp;</div>
-            <div class="freshdesignweb-top">
-              <!--  <a></a>
-                    <span class="right">
-                        <a href="">
-                        </a>
-                    </span>-->
-                <div class="clr"></div>
-            </div>
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8 lt8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8" />
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  -->
+    <title>Telestroke Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login" />
 
-            <!-- Navigation Menu -->
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/demo.css")" />
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/style3.css")" />
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/animate-custom.css")" />
+    <!-- Required scripts -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/form/form.js")"></script>
+</head>
+<body>
+<div class="container">
 
+    <header>
+        <!--   <h1>Telestroke</h1>-->
 
-            <!--/ freshdesignweb top bar -->
-            <header>
-                <h1><!--<span>Welcome !!!</span> Please enter your credentials--></h1>
-            </header>
-            <div>
-                <!--<span style="float:left;width: 49%;">
-                    <img src="@@loginPicUrl" width="350px" height="350px">
-                </span>
-                <span style="float:right;width: 49%;">-->
-                    <div  class="form" style="background: #f1f1f1;border-radius: 25px;margin-top: 35px;padding-top: 40px;">
-                        <form id="loginForm" method="post" action="@controllers.routes.AuthenticationController.handleLogin()" data-uri="@controllers.review.routes.ReviewController.getPatientsToReview()">
-                            <div class="box error">
-                                <div class="content">
-                                    <p></p>
-                                </div>
+    </header>
+    <section>
+        <div id="container_demo" >
+            <a class="hiddenanchor" id="toregister"></a>
+            <a class="hiddenanchor" id="tologin"></a>
+            <div id="wrapper">
+                <div id="login" class="animate form">
+                    <form id="loginForm" method="post" action="@controllers.routes.AuthenticationController.handleLogin()" data-uri="@controllers.review.routes.ReviewController.getPatientsToReview()">
+                        <h1>Telestroke</h1>
+                        <div class="box error">
+                            <div class="content">
+                                <p style="color: red;"></p>
                             </div>
-                            <table cellspacing="5" cellpadding="5">
-                                <tr>
-                                    <td><p class="contact"><label for="userName">User Name :</label></p></td>
-                                    <td><input id="userName" name="userName" type="email" placeholder="example@@domain.com" required="required" tabindex="1"></td>
-                                </tr>
-                                <tr>
-                                    <td><p class="contact"><label for="password">Password :</label></p></td>
-                                    <td><input id="password" name="password" placeholder="Password" required="required" tabindex="2" type="password"></td>
-                                </tr>
-                                <tr>
-                                    <td><button class="button" name="submit" id="submit" value="Login">Login</button></td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
-               <!-- </span>-->
+                        </div>
+                        <p>
+                            <label for="userName" class="uname" data-icon="u" > Your email or username </label>
+                            <input id="userName" name="userName" required="required" type="email" placeholder="mymail@@mail.com">
+                        </p>
+                        <p>
+                            <label for="password" class="youpasswd" data-icon="p"> Your password </label>
+                            <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" >
+                        </p>
+                        <!--<p class="keeplogin">
+                            <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
+                            <label for="loginkeeping">Keep me logged in</label>
+                        </p>-->
+                        <p class="login button">
+                            <button class="button" name="submit" id="submit" value="Login">Login</button>
+
+                        </p>
+                        <p class="change_link">
+                            Copyright 2014. All Rights Reserved | <a href="http://www.appliedcloudcomputing.com/">Developed by Applied Cloud Computing</a>
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
-
-    <!-- Footer -->
-   @footer()
+    </section>
 </div>
-<!--end wrapper-->
-} {
-<script type="text/javascript" src="@routes.Assets.at("javascripts/form/form.js")"></script>
-}
+</body>
+</html>

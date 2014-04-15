@@ -151,7 +151,7 @@ input {
 }
 
 /*styling both submit buttons */
-#wrapper p.button input{
+#wrapper p.button button{
 	width: 30%;
 	cursor: pointer;	
 	background: rgb(61, 157, 179);
@@ -179,11 +179,11 @@ input {
 	     -o-transition: all 0.2s linear;
 	        transition: all 0.2s linear;
 }
-#wrapper p.button input:hover{
+#wrapper p.button button:hover{
 	background: rgb(74, 179, 198);
 }
-#wrapper p.button input:active,
-#wrapper p.button input:focus{
+#wrapper p.button button:active,
+#wrapper p.button button:focus{
 	background: rgb(40, 137, 154);
 	position: relative;
 	top: 1px;

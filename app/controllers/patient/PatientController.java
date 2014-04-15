@@ -248,7 +248,7 @@ public class PatientController extends Controller {
                 try {
 
                     //SENDING REGISTRATION SMS
-                    String exotelSmsBody = "Hi, " + user.getDisplayName() + "\nNew Patient added \n Name: " + p.getFullName() + "\n Click on Url: www.telestroke.in";
+                    String exotelSmsBody = "Message from Telestroke, \nNew patient details " + "www.telestroke.in" + "\nfrom  " + u.getDisplayName();
                     SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
                     ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
                     ssa.tell(ssam, ssa);

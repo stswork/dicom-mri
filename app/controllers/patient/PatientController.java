@@ -74,9 +74,17 @@ public class PatientController extends Controller {
                         Expr.eq("userType", UserType.DOCTOR)
                 )
         ).findList();
-        if(r == null)
-            r = new Review();
-        return ok(views.html.patient.step1.render("Patient", u, users, r));
+		StringBuilder sb = new StringBuilder();
+        if(r != null) {
+			List<Comment> comments = r.getAlbum().getCommentList();
+			for(Comment c: comments){
+				if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
+					sb.append(c.getMessage());
+			}
+		} else {
+			r = new Review();
+		}
+        return ok(views.html.patient.step1.render("Patient", u, users, r, sb.toString()));
     }
 
     //Will be used to post data of a patient including the images. Same function will be used to post data after editing the patient info.

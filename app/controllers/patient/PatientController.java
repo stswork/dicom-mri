@@ -74,14 +74,16 @@ public class PatientController extends Controller {
                         Expr.eq("userType", UserType.DOCTOR)
                 )
         ).findList();
-        if(r == null)
-            r = new Review();
-        List<Comment> comments = r.getAlbum().getCommentList();
-        StringBuilder sb = new StringBuilder();
-        for(Comment c: comments){
-            if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
-                sb.append(c.getMessage());
-        }
+		StringBuilder sb = new StringBuilder();
+        if(r != null) {
+			List<Comment> comments = r.getAlbum().getCommentList();
+			for(Comment c: comments){
+				if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
+					sb.append(c.getMessage());
+			}
+		} else {
+			r = new Review();
+		}
         return ok(views.html.patient.step1.render("Patient", u, users, r, sb.toString()));
     }
 

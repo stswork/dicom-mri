@@ -246,7 +246,7 @@ public class PatientController extends Controller {
                 }
                 try {
 
-                    String url="localhost:9000?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
+                    String url="http://localhost:9000?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
 
                     //SENDING REGISTRATION SMS
                     String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();

@@ -41,8 +41,8 @@ public class AuthenticationController extends Controller {
         String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password").toString();
         Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
 
-        if(username !=null){
-            doctorLogin();
+        if(username !=null&&password!=null&&id!=null){
+            doctorLogin(username,password,id);
         }
         }
         return ok(views.html.index.render("Welcome"));
@@ -86,13 +86,13 @@ public class AuthenticationController extends Controller {
         return ok();
     }
 
-    public static Result doctorLogin(){
+    public static Result doctorLogin(String username,String password,Long id){
         try {
         ObjectMapper mapper = new ObjectMapper();
-        String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString())?null:request().queryString().get("username")[0].toString();
+        /*String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString())?null:request().queryString().get("username")[0].toString();
         String password=StringUtils.isEmpty(request().queryString().get("password")[0].toString())?null:request().queryString().get("password")[0].toString();
-            Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
-
+        Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
+*/
         User u = null;
         u = Ebean.find(User.class).where(
                 Expr.and(

@@ -1,0 +1,66 @@
+@(message: String)
+
+@import tags._
+
+@main("Home") {
+<div id="wrapper" class="container_12 clearfix">
+
+    <div class="container">
+        <!-- freshdesignweb top bar -->
+        <!-- Text Logo -->
+        <h1 id="logo" class="grid_4">Telestroke</h1>
+        <div class="hr grid_12 clearfix">&nbsp;</div>
+        <div class="freshdesignweb-top">
+            <!--  <a></a>
+                  <span class="right">
+                      <a href="">
+                      </a>
+                  </span>-->
+            <div class="clr"></div>
+        </div>
+
+        <!-- Navigation Menu -->
+
+
+        <!--/ freshdesignweb top bar -->
+        <header>
+            <h1><!--<span>Welcome !!!</span> Please enter your credentials--></h1>
+        </header>
+        <div>
+            <!--<span style="float:left;width: 49%;">
+                <img src="@@loginPicUrl" width="350px" height="350px">
+            </span>
+            <span style="float:right;width: 49%;">-->
+            <div  class="form" style="background: #f1f1f1;border-radius: 25px;margin-top: 35px;padding-top: 40px;">
+                <form id="loginForm" method="post" action="@controllers.routes.AuthenticationController.handleLogin()" data-uri="@controllers.review.routes.ReviewController.getPatientsToReview()">
+                    <div class="box error">
+                        <div class="content">
+                            <p></p>
+                        </div>
+                    </div>
+                    <table cellspacing="5" cellpadding="5">
+                        <tr>
+                            <td><p class="contact"><label for="userName">User Name :</label></p></td>
+                            <td><input id="userName" name="userName" type="email" placeholder="example@@domain.com" required="required" tabindex="1"></td>
+                        </tr>
+                        <tr>
+                            <td><p class="contact"><label for="password">Password :</label></p></td>
+                            <td><input id="password" name="password" placeholder="Password" required="required" tabindex="2" type="password"></td>
+                        </tr>
+                        <tr>
+                            <td><button class="button" name="submit" id="submit" value="Login">Login</button></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <!-- </span>-->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @footer()
+</div>
+<!--end wrapper-->
+} {
+<script type="text/javascript" src="@routes.Assets.at("javascripts/form/form.js")"></script>
+}

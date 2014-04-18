@@ -1,0 +1,61 @@
+# USERS
+users:
+    - !!models.user.User
+        userName: superuser@telestroke.in
+        password: superuser
+        displayName: Super User
+        userType: SUPER_USER
+        location: Thane
+        phone: 9029720294
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: shantanu@telestroke.in
+        password: shantanu
+        displayName: Dr Shantanu
+        userType: DOCTOR
+        location: Thane
+        phone: 9029234294
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: sagar@telestroke.in
+        password: sagar
+        displayName: Dr Sagar
+        userType: DOCTOR
+        location: Thane
+        phone: 902923444
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: anupam@telestroke.in
+        password: anupam
+        displayName: Dr Anupam
+        userType: DOCTOR
+        location: Thane
+        phone: 902923423
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: shubho.pramanik@gmail.in
+        password: shubho
+        displayName: Dr Shubho
+        userType: DOCTOR
+        location: Thane
+        phone: 9029720294
+        createdBy: !!models.user.User
+                    id: 1
+
+    - !!models.user.User
+        userName: nilesh@telestroke.in
+        password: nilesh
+        displayName: Nilesh Satpute
+        userType: MRI_SCAN_CENTER
+        location: Thane
+        phone: 9029720294
+        createdBy: !!models.user.User
+                    id: 1

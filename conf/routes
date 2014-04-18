@@ -1,0 +1,41 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# APPLICATION
+#GET     /                           controllers.Application.index()
+#GET     /save                       controllers.Application.patientSave()
+#GET     /                           controllers.AuthenticationController.login()
+
+# Map static resources from the /public folder to the /assets URL path
+GET  /assets/*file                  controllers.Assets.at(path="/public", file)
+
+# AUTHENTICATION
+GET         /                        controllers.AuthenticationController.login()
+POST        /authenticate            controllers.AuthenticationController.handleLogin()
+GET         /logout                  controllers.AuthenticationController.logout()
+
+# PATIENT
+GET         /patient/:id             controllers.patient.PatientController.save(id: Long)
+POST        /patient/one             controllers.patient.PatientController.stepOne()
+POST        /patient/two             controllers.patient.PatientController.stepTwo()
+
+# ALBUM
+POST        /album/image/remove      controllers.album.AlbumController.removeImage()
+
+# REVIEW
+GET         /unreviewed              controllers.review.ReviewController.getPatientsToReview()
+GET         /reviewed                controllers.review.ReviewController.getPatientsReviewed()
+POST        /review/disable          controllers.review.ReviewController.disable()
+
+# COMMENT
+POST        /comment                 controllers.comment.CommentController.handleSave()
+
+# ADMIN
+GET         /loginpic                controllers.loginPic.LoginPicController.save(id: Long ?= 0)
+POST        /loginpic                controllers.loginPic.LoginPicController.handleSave()
+
+# USER
+GET         /userList                controllers.user.UserController.getUser()
+GET         /user                    controllers.user.UserController.save(id: Long ?= 0)
+POST        /user                    controllers.user.UserController.handleSave()

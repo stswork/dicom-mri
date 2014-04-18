@@ -1,0 +1,34 @@
+@(message: String, loginPic: models.album.Login, u: models.response.user.User)
+@import tags._
+@main("Admin") {
+<div id="wrapper" class="container_12 clearfix">
+    <!-- Text Logo -->
+    @header(u)
+    <div class="container">
+        <header>
+            <h1><span>Administrator</span></h1>
+        </header>
+        <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
+            <form id="patientForm" method="post" action="@controllers.loginPic.routes.LoginPicController.handleSave()" data-uri="@controllers.loginPic.routes.LoginPicController.save(0)" enctype="multipart/form-data">
+                <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
+                    <tr>
+                        <td>
+                            <p class="contact"><label for="name">Please Upload Login Page Image :</label></p>
+                            <input type="file" name="jpegFC" id="jpegFC" accept="image/*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="button" name="submit" id="submit" value="Save"> Save </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <!--<div class="hr grid_12 clearfix">&nbsp;</div>-->
+    <!-- Footer -->
+    @footer()
+</div>
+} {
+}

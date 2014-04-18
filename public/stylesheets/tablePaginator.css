@@ -1,0 +1,22 @@
+#tablePagination {
+font-size: 0.8em;
+padding: 18px 75px 0px 0px;
+height: 20px
+}
+
+#tablePagination_paginater {
+margin-left: auto;
+margin-right: auto;
+}
+
+#tablePagination img {
+padding: 0px 2px;
+}
+
+#tablePagination_perPage {
+float: right;
+}
+
+#tablePagination_paginater {
+float: right;
+}

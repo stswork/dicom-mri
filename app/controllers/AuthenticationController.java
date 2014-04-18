@@ -5,6 +5,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import controllers.patient.PatientController;
 import models.album.Login;
 import models.request.authentication.AuthenticationRequest;
 import models.response.ResponseMessage;
@@ -20,6 +21,7 @@ import play.mvc.With;
 
 public class AuthenticationController extends Controller {
 
+    @BodyParser.Of(BodyParser.Json.class)
     public static Result login() {
         /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
@@ -33,6 +35,15 @@ public class AuthenticationController extends Controller {
         } else {
             return redirect(controllers.review.routes.ReviewController.getPatientsToReview());
         }*/
+        if(request().queryString().size()!=0) {
+        String username=StringUtils.isEmpty(request().queryString().get("username").toString())?null:request().queryString().get("username").toString();
+        String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password").toString();
+        Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
+
+        if(username !=null){
+            doctorLogin();
+        }
+        }
         return ok(views.html.index.render("Welcome"));
     }
 
@@ -77,9 +88,9 @@ public class AuthenticationController extends Controller {
     public static Result doctorLogin(){
         try {
         ObjectMapper mapper = new ObjectMapper();
-        String username=StringUtils.isEmpty(request().queryString().get("username").toString())?null:request().queryString().get("username").toString();
-        String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password").toString();
-        Long id= StringUtils.isEmpty(request().queryString().get("id").toString())?0:Long.parseLong(request().queryString().get("id").toString());
+        String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString())?null:request().queryString().get("username")[0].toString();
+        String password=StringUtils.isEmpty(request().queryString().get("password")[0].toString())?null:request().queryString().get("password")[0].toString();
+            Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
 
         User u = null;
         u = Ebean.find(User.class).where(
@@ -92,7 +103,7 @@ public class AuthenticationController extends Controller {
             return notFound(Json.toJson(new ResponseMessage(404, "No such user found!", ResponseMessageType.NOT_FOUND)));
         models.response.user.User _responseUser = new models.response.user.User(u.getId(), u.getUserName(), u.getDisplayName(), u.getUserType().name().toUpperCase());
         session("user", StringUtils.toString(org.apache.commons.codec.binary.Base64.encodeBase64(mapper.writeValueAsString(_responseUser).getBytes()), "UTF-8"));
-        return redirect(controllers.patient.routes.PatientController.save(id));
+        return redirect("/patient/"+id);
     } catch (Exception e) {
         e.printStackTrace();
         return badRequest(Json.toJson(new ResponseMessage(400, "No such user found!", ResponseMessageType.BAD_REQUEST)));

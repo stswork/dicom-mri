@@ -22,7 +22,7 @@ import play.mvc.With;
 public class AuthenticationController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
-    @With(Authenticated.class)
+
     public static Result login() {
         /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
@@ -37,15 +37,18 @@ public class AuthenticationController extends Controller {
             return redirect(controllers.review.routes.ReviewController.getPatientsToReview());
         }*/
         if(request().queryString().size()!=0) {
-        String username=StringUtils.isEmpty(request().queryString().get("username").toString())?null:request().queryString().get("username").toString();
-        String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password").toString();
+        String username=StringUtils.isEmpty(request().queryString().get("username").toString())?null:request().queryString().get("username")[0].toString();
+        String password=StringUtils.isEmpty(request().queryString().get("password").toString())?null:request().queryString().get("password")[0].toString();
         Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());
 
         if(username !=null&&password!=null&&id!=null){
             doctorLogin(username,password,id);
         }
+            return redirect("/patient/"+id);
         }
+        else{
         return ok(views.html.index.render("Welcome"));
+        }
     }
 
     @BodyParser.Of(BodyParser.Json.class)

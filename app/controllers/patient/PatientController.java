@@ -53,7 +53,6 @@ public class PatientController extends Controller {
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
 
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
-    @Transactional
     @With(Authenticated.class)
     public static Result save(Long id) {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
@@ -316,14 +315,12 @@ public class PatientController extends Controller {
             review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
-        String _message = "Patient successfully added!";
         return ok(views.html.patient.step2.render("Data list", u, a.getId()));
     }
 
     @Transactional
     @With(Authenticated.class)
     public static Result stepTwo() {
-
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
@@ -356,16 +353,16 @@ public class PatientController extends Controller {
                     file = fp.getFile();
                     BufferedImage jpegImage = DicomManager.getJpegFromDicom(file);
                     if(jpegImage == null)
-                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Oops! Some error occurred. Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     String _s3Url = DicomManager.writeDicomJpegToS3(jpegImage, file.getName());
                     if(StringUtils.isEmpty(_s3Url))
-                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Oops! Some error occurred. Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
                 } else if (StringUtils.equalsIgnoreCase(_extension, "jpg") || StringUtils.equalsIgnoreCase(_extension, "jpeg") ||  StringUtils.equalsIgnoreCase(_extension, "png")||  StringUtils.equalsIgnoreCase(_extension, "bmp")) {
                     file = fp.getFile();
                     String _s3Url = DicomManager.writeJpegToS3(file,_extension);
                     if(StringUtils.isEmpty(_s3Url))
-                        return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
+                        return internalServerError(Json.toJson(new ResponseMessage(500, "Oops! Some error occurred. Please try again.", ResponseMessageType.INTERNAL_SERVER_ERROR)));
                     i = new Image(_s3Url, a);
                 } else {
                     return badRequest(Json.toJson(new ResponseMessage(400, "Invalid file submission!", ResponseMessageType.BAD_REQUEST)));
@@ -383,6 +380,6 @@ public class PatientController extends Controller {
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }
-        return redirect(controllers.patient.routes.PatientController.save(0));
+        return ok(Json.toJson(new ResponseMessage(200, "Patient successfully added!", ResponseMessageType.SUCCESSFUL)));
     }
 }

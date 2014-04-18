@@ -16,7 +16,6 @@
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
                 <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.stepOne()" data-uri="@controllers.patient.routes.PatientController.save(0)">
                     <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
-
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getId() != null) {
                             <td><input type="hidden" id="id" name="id" value="@review.getAlbum().getPatient().getId()"></td>
@@ -414,16 +413,10 @@
             });
             });
 
-
-
-
         </script>
         <style type="text/css">
             .fancybox-custom .fancybox-skin {
             box-shadow: 0 0 50px #222;
             }
         </style>
-
-
-
 }

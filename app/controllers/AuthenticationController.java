@@ -22,6 +22,7 @@ import play.mvc.With;
 public class AuthenticationController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
+    @With(Authenticated.class)
     public static Result login() {
         /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {

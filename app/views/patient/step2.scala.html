@@ -13,14 +13,20 @@
             }
         </header>
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
-            <form onsubmit="return validate()" id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.stepTwo()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data">
+            <form id="patientForm" name="patientForm" method="post" action="@controllers.patient.routes.PatientController.stepTwo()" data-uri="@controllers.patient.routes.PatientController.save(0)" enctype="multipart/form-data" accept-charset="utf-8">
+                <div class="box message" style="display:none;padding-top: 2%;padding-left: 1%;padding-bottom: 2%;color: red;">
+                    <div class="content-m">
+                        <p></p>
+                    </div>
+                </div>
                 <input type="hidden" value="@albumId" name="albumId" id="albumId"/>
                 <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
                     <tr>
-                        <td colspan="2"><p class="contact"><label for="name">SELECT FILES :</label></p><br/><br/><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                        <td colspan="2"><p class="contact"><label for="dicomToJpegFC">SELECT FILES :</label></p><br/><br/><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
                     </tr>
                     <tr>
                         <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
+                        <td><img src='@routes.Assets.at("images/loader.gif")' id="loader-a" style="display:none;"/></td>
                     </tr>
                 </table>
             </form>
@@ -30,4 +36,5 @@
     @footer()
 </div>
 } {
+<script type="text/javascript" src="@routes.Assets.at("javascripts/patient/events.js")"></script>
 }

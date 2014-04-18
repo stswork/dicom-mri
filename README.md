@@ -1,4 +1,4 @@
 dicom-mri
 =========
 
-Dicom Mri
+Telestroke

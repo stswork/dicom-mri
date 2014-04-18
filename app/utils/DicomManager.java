@@ -133,7 +133,7 @@ public class DicomManager {
         }
     }
 
-    public static String writeJpegToS3(File jpegFile,String extension) {
+    public static String writeJpegToS3(File jpegFile, String extension) {
         try {
             String tempDir = System.getProperty("user.home");
             String separator = File.separator;

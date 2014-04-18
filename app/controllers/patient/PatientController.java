@@ -247,15 +247,17 @@ public class PatientController extends Controller {
                 }
                 try {
 
+                    String url="localhost:9000?username"+user.getUserName()+"&password="+user.getPassword();
+
                     //SENDING REGISTRATION SMS
-                    String exotelSmsBody = "Message from Telestroke, \nNew patient details " + "www.telestroke.in" + "\nfrom  " + u.getDisplayName();
+                    String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
                     SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
                     ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
                     ssa.tell(ssam, ssa);
 
 
                     //SENDING EMAIL
-                    Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone());
+                    Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone(),url);
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {

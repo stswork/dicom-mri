@@ -23,6 +23,7 @@ public class Mail {
     private String logoUri;
     private String tagUri;
     private String contentBoxUri;
+    private String url;
 
     public Mail() {
     }
@@ -34,7 +35,9 @@ public class Mail {
         this.dEmail = dEmail;
     }
 
-    public Mail(String pName, String pEmail, Integer pAge, Gender pGender, String dName, String dEmail, String mName, String mLocation, String mPhone) {
+
+
+    public Mail(String pName, String pEmail, Integer pAge, Gender pGender, String dName, String dEmail, String mName, String mLocation, String mPhone,String url) {
         this.pName = pName;
         this.pEmail = pEmail;
         this.pAge = pAge;
@@ -44,6 +47,14 @@ public class Mail {
         this.mName = mName;
         this.mLocation = mLocation;
         this.mPhone = mPhone;
+        this.url=url;
+    }
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Integer getpAge() {

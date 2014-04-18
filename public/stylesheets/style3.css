@@ -36,9 +36,9 @@ a.hiddenanchor{
 #wrapper{
 	width: 60%;
 	right: 0px;
-	min-height: 560px;	
+	/*min-height: 560px;*/
 	margin: 0px auto;	
-	width: 500px;
+	width: 300px;
 	position: relative;	
 }
 /**** Styling the form elements **/
@@ -111,7 +111,7 @@ input {
 
 /* all the input except submit and checkbox */
 #wrapper input:not([type="checkbox"]){
-	width: 92%;
+	width: 86%;
 	margin-top: 4px;
 	padding: 10px 5px 10px 32px;	
 	border: 1px solid rgb(178, 178, 178);
@@ -224,9 +224,9 @@ p.change_link{
 	color: rgb(127, 124, 124);
 	left: 0px;
 	height: 20px;
-	width: 440px;
+	width: 240px;
 	padding: 17px 30px 20px 30px;
-	font-size: 16px	;
+	font-size: 08px	;
 	text-align: right;
 	border-top: 1px solid rgb(219, 229, 232);
 	-webkit-border-radius: 0 0  5px 5px;

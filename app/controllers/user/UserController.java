@@ -12,6 +12,7 @@ import models.user.UserType;
 import org.apache.commons.lang3.StringUtils;
 import play.Logger;
 import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
@@ -61,19 +62,19 @@ public class UserController extends Controller {
 
     @Transactional
     @With(Authenticated.class)
+    @BodyParser.Of(BodyParser.Json.class)
     public static Result handleSave(){
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
-        models.user.User user =null;
-        Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
-        //Long id = Long.valueOf(StringUtils.isEmpty(map.get("id")[0]) ? "0" : map.get("id")[0]);
-        String userName=StringUtils.isEmpty(map.get("userName")[0]) ? StringUtils.EMPTY : map.get("userName")[0];
-        String password=StringUtils.isEmpty(map.get("password")[0]) ? StringUtils.EMPTY : map.get("password")[0];
-        String displayName=StringUtils.isEmpty(map.get("displayName")[0]) ? StringUtils.EMPTY : map.get("displayName")[0];
-        String userType=StringUtils.isEmpty(map.get("userType")[0]) ? StringUtils.EMPTY : map.get("userType")[0];
-        String location=StringUtils.isEmpty(map.get("location")[0]) ? StringUtils.EMPTY : map.get("location")[0];
-        String phone=StringUtils.isEmpty(map.get("phone")[0]) ? StringUtils.EMPTY : map.get("phone")[0];
-        user=new User(userName,password,displayName,UserType.valueOf(userType),location,phone);
+        models.user.User user = null;
+        Map<String, String[]> map = request().body().asFormUrlEncoded();
+        String userName = StringUtils.isEmpty(map.get("userName")[0]) ? StringUtils.EMPTY : map.get("userName")[0];
+        String password = StringUtils.isEmpty(map.get("password")[0]) ? StringUtils.EMPTY : map.get("password")[0];
+        String displayName = StringUtils.isEmpty(map.get("displayName")[0]) ? StringUtils.EMPTY : map.get("displayName")[0];
+        String userType = StringUtils.isEmpty(map.get("userType")[0]) ? StringUtils.EMPTY : map.get("userType")[0];
+        String location = StringUtils.isEmpty(map.get("location")[0]) ? StringUtils.EMPTY : map.get("location")[0];
+        String phone = StringUtils.isEmpty(map.get("phone")[0]) ? StringUtils.EMPTY : map.get("phone")[0];
+        user = new User(userName,password,displayName,UserType.valueOf(userType),location,phone);
         /*user.setUserName(userName);
         user.setPassword(password);
         user.setDisplayName(displayName);

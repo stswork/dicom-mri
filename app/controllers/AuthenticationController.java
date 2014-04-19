@@ -22,7 +22,6 @@ import play.mvc.With;
 public class AuthenticationController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
-
     public static Result login() {
         /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
@@ -48,14 +47,13 @@ public class AuthenticationController extends Controller {
             }
             return redirect(controllers.patient.routes.PatientController.save(id));
         }
-        else{
+        else {
             return ok(views.html.index.render("Welcome"));
         }
     }
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result handleLogin() {
-
         try {
             AuthenticationRequest ar = null;
             JsonNode body = request().body().asJson();
@@ -89,11 +87,11 @@ public class AuthenticationController extends Controller {
         return ok();
     }
 
-    public static Result doctorLogin(String username,String password,Long id){
+    public static Result doctorLogin(String username, String password, Long id){
         try {
             ObjectMapper mapper = new ObjectMapper();
-            /*String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString())?null:request().queryString().get("username")[0].toString();
-            String password=StringUtils.isEmpty(request().queryString().get("password")[0].toString())?null:request().queryString().get("password")[0].toString();
+            /*String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString()) ? null:request().queryString().get("username")[0].toString();
+            String password=StringUtils.isEmpty(request().queryString().get("password")[0].toString()) ? null:request().queryString().get("password")[0].toString();
             Long id= StringUtils.isEmpty(request().queryString().get("id")[0])?0:Long.parseLong(request().queryString().get("id")[0].toString());*/
             User u = null;
             u = Ebean.find(User.class).where(
@@ -112,7 +110,6 @@ public class AuthenticationController extends Controller {
             return badRequest(Json.toJson(new ResponseMessage(400, "No such user found!", ResponseMessageType.BAD_REQUEST)));
         }
     }
-
 
     public static Result logout() {
         session().clear();

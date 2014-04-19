@@ -12,7 +12,12 @@
 
         </header>
         <div class="form" style="width:100%;background: #f1f1f1;border-radius: 10px;">
-            <form id="userForm" method="post" action="@controllers.user.routes.UserController.handleSave()" data-uri="@controllers.user.routes.UserController.save(0)" enctype="multipart/form-data">
+            <form id="userForm" method="post" action="@controllers.user.routes.UserController.handleSave()" data-uri="@controllers.user.routes.UserController.save(0)">
+                <div class="box message" style="display:none;padding-top: 2%;padding-left: 1%;padding-bottom: 2%;color: red;">
+                    <div class="content-m">
+                        <p></p>
+                    </div>
+                </div>
                 <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
                     <tr>
                         <td><p class="contact"><label for="name">User Name :</label></p></td>
@@ -46,7 +51,8 @@
                     </tr>
 
                     <tr>
-                        <td colspan="2"><button class="button" name="submit" id="submit" value="Save">Save</button></td>
+                        <td><button class="button" name="submit" id="submit" value="Save">Save</button></td>
+                        <td><img src='@routes.Assets.at("images/loader.gif")' id="loader-a" style="display:none;"/></td>
                     </tr>
                 </table>
             </form>
@@ -58,4 +64,5 @@
     @footer()
 </div>
 } {
+<script type="text/javascript" src="@routes.Assets.at("javascripts/user/events.js")"></script>
 }

@@ -1,5 +1,6 @@
 @(message: String, u: models.response.user.User, user: List[models.user.User], review: models.review.Review, mriComment: String)
 @import tags._
+@import java.math.BigInteger; var i=1;
 @main("Patient") {
 <div id="wrapper" class="container_12 clearfix">
     <!-- Text Logo -->
@@ -120,8 +121,9 @@
                         }
                         @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {
+
                                 @if(img.getImageUrl().toString() != null) {
-                                    <p><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="">
+                                    <p style="display: inline;"><a class="fancybox" rel="gallery1" href="@img.getImageUrl()" title="">
                                        <img src="@img.getImageUrl()" alt="" />
                                        </a>
                                     </p>

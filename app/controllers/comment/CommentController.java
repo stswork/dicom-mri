@@ -28,7 +28,6 @@ public class CommentController extends Controller {
     @Transactional
     @With(Authenticated.class)
     public static Result handleSave() {
-
         Comment c = null;
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
@@ -45,6 +44,6 @@ public class CommentController extends Controller {
         c.save();
         r.setReviewed(true);
         r.update();
-        return redirect(controllers.patient.routes.PatientController.save(reviewId));
+        return ok(Json.toJson(new ResponseMessage(200, "Comment successfully added!", ResponseMessageType.SUCCESSFUL)));
     }
 }

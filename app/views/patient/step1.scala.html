@@ -103,15 +103,10 @@
                             </select>
                         </td>
                         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
-                        <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
+                            <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
                         }
                     </tr>
                     }
-
-                    <!--<tr>
-                        <td colspan="2"><p class="contact"><label for="name">DICOM FILE :</label></p><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
-                        <td colspan="2"><p class="contact"><label for="name">JPEG FILE :</label></p><input type="file" name="jpegFC" id="jpegFC" accept="image/*" class="multi2" multiple="multiple"></td>
-                    </tr>-->
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="@review.getAlbum().getId()">
@@ -136,12 +131,20 @@
             <form id="commentForm" method="post" action="@controllers.comment.routes.CommentController.handleSave()">
                 <table>
                     <tr>
+                        <td colspan="3"><div class="box message" style="display:none;padding-top: 2%;padding-left: 1%;padding-bottom: 2%;color: red;">
+                            <div class="content-m">
+                                <p></p>
+                            </div>
+                        </div></td>
+                    </tr>
+                    <tr>
                         <input type="hidden" id="aId" name="aId" value="@review.getAlbum().getId()">
                         <input type="hidden" id="rId" name="rId" value="@review.getId()">
                         <td><p class="contact"><label for="comment">Doctor Comments :</label></p></td>
                         <td colspan="5"><input type="textarea" id="message" name="message" value="" placeholder="Please enter your comments" rows="4" cols="50"/></td>
 
                         <td><button class="button" name="submit" id="submit" value="Post Comment">Post Comment</button></td>
+                        <td><img src='@routes.Assets.at("images/loader.gif")' id="loader-a" style="display:none;"/></td>
                     </tr>
                 </table>
             </form>
@@ -150,7 +153,7 @@
 
 
         </div>
-        <div class="form" style="width: 100%;background: #f1f1f1;border-radius: 25px;margin-top: 35px;">
+        <div class="form" style="width: 100%;background: #f1f1f1;border-radius: 7px;margin-top: 35px;">
         <table style="clear: both;float: left;" cellspacing="0">
             <tr>
                 <td>Doctor </td>
@@ -207,7 +210,7 @@
                         files2 = $(this).val();
                     });
 
-            if(files1==''&&files2=='') {
+            if(files1 == '' && files2 == '') {
                         alert("No document file selected");
                         $check = false;
                     }
@@ -419,4 +422,5 @@
             box-shadow: 0 0 50px #222;
             }
         </style>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/patient/stepOne/events.js")"></script>
 }

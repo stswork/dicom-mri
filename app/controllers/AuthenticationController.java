@@ -46,12 +46,10 @@ public class AuthenticationController extends Controller {
                 doctorLogin(username, password, id);
                 return redirect(controllers.patient.routes.PatientController.save(id));
             }
-
         }
         else {
             return ok(views.html.index.render("Welcome"));
         }
-
     }
 
     @BodyParser.Of(BodyParser.Json.class)

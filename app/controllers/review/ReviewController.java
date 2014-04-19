@@ -40,6 +40,8 @@ public class ReviewController extends Controller {
         List<models.response.review.Review> reviews = new ArrayList<models.response.review.Review>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         Query<Review> query = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient");
+        String sortBy = "created";
+        String order = "desc";
         if(User.find.byId(u.getId()).getUserType().equals(UserType.SUPER_USER))
             reviewList = query.where(Expr.eq("reviewed", false)).findList();
         else {
@@ -54,7 +56,7 @@ public class ReviewController extends Controller {
                                     Expr.eq("status", models.Status.ACTIVE)
                             )
                     )
-            ).findList();
+            ).orderBy(sortBy + " " + order).findList();
         }
         if(reviewList == null || reviewList.size() <= 0)
             reviewList = new ArrayList<Review>();

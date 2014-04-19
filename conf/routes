@@ -14,7 +14,7 @@ GET  /assets/*file                  controllers.Assets.at(path="/public", file)
 GET         /                        controllers.AuthenticationController.login()
 POST        /authenticate            controllers.AuthenticationController.handleLogin()
 GET         /logout                  controllers.AuthenticationController.logout()
-POST        /doctorLogin             controllers.AuthenticationController.doctorLogin()
+#POST        /doctorLogin             controllers.AuthenticationController.doctorLogin()
 
 # PATIENT
 GET         /patient/:id             controllers.patient.PatientController.save(id: Long)

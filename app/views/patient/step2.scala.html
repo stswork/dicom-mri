@@ -22,7 +22,12 @@
                 <input type="hidden" value="@albumId" name="albumId" id="albumId"/>
                 <table cellspacing="5" cellpadding="5" style="clear: both;float: left;">
                     <tr>
-                        <td colspan="2"><p class="contact"><label for="dicomToJpegFC">SELECT FILES :</label></p><br/><br/><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi"></td>
+                        <td colspan="2"><p class="contact"><label for="dicomToJpegFC">SELECT FILES :</label></p><br/><br/><input type="file" name="dicomToJpegFC" id="dicomToJpegFC" multiple="multiple" accept="*" class="multi" onChange="makeFileList();"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ul id="fileList"><li>No Files Selected</li></ul>
+                        </td>
                     </tr>
                     <tr>
                         <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
@@ -37,4 +42,59 @@
 </div>
 } {
 <script type="text/javascript" src="@routes.Assets.at("javascripts/patient/stepTwo/events.js")"></script>
+<script type="text/javascript">
+    function validate() {
+    $check = true;
+    var files1,files2;
+    $(".multi").each(function(){
+    files1 = $(this).val();
+    });
+
+    $(".multi2").each(function(){
+    files2 = $(this).val();
+    });
+
+    if(files1==''&&files2=='') {
+    alert("No document file selected");
+    $check = false;
+    }
+
+
+    $('#patientForm').validate({
+    rules: {
+    doctorIds: {
+    required: true
+
+    }
+    },
+    messages: {
+    doctorIds: {
+    minlength: $.format('Please select at least {0} things.')
+    }
+    }
+    });
+
+    return $check;
+    }
+</script>
+
+<script type="text/javascript">
+    function makeFileList() {
+    var input = document.getElementById("dicomToJpegFC");
+    var ul = document.getElementById("fileList");
+    while (ul.hasChildNodes()) {
+    ul.removeChild(ul.firstChild);
+    }
+    for (var i = 0; i < input.files.length; i++) {
+    var li = document.createElement("li");
+    li.innerHTML = input.files[i].name;
+    ul.appendChild(li);
+    }
+    if(!ul.hasChildNodes()) {
+    var li = document.createElement("li");
+    li.innerHTML = 'No Files Selected';
+    ul.appendChild(li);
+    }
+    }
+</script>
 }

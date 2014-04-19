@@ -62,7 +62,6 @@ public class UserController extends Controller {
 
     @Transactional
     @With(Authenticated.class)
-    @BodyParser.Of(BodyParser.Json.class)
     public static Result handleSave(){
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
@@ -74,7 +73,7 @@ public class UserController extends Controller {
         String userType = StringUtils.isEmpty(map.get("userType")[0]) ? StringUtils.EMPTY : map.get("userType")[0];
         String location = StringUtils.isEmpty(map.get("location")[0]) ? StringUtils.EMPTY : map.get("location")[0];
         String phone = StringUtils.isEmpty(map.get("phone")[0]) ? StringUtils.EMPTY : map.get("phone")[0];
-        user = new User(userName,password,displayName,UserType.valueOf(userType),location,phone);
+        user = new User(userName, password, displayName, UserType.valueOf(userType), location, phone);
         /*user.setUserName(userName);
         user.setPassword(password);
         user.setDisplayName(displayName);
@@ -87,7 +86,7 @@ public class UserController extends Controller {
         }*/
         user.setCreatedBy(loggedInUser);
         user.save();
-        return redirect(controllers.user.routes.UserController.save(0));
+        return ok(Json.toJson(new ResponseMessage(200, "User successfully added!", ResponseMessageType.SUCCESSFUL)));
     }
 
 }

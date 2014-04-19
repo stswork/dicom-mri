@@ -20,7 +20,8 @@ $(document).ready(function () {
                 $("#dicomToJpegFC").val("");
                 setTimeout(function () {
                     $(e.currentTarget).find("div.message").hide();
-                }, 5000);
+                    window.location = $(e.currentTarget).data().uri;
+                }, 3000);
             },
             error: function(xhr, textStatus, errorThrown) {
                 var em = jQuery.parseJSON(xhr.responseText)

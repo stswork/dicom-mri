@@ -1,14 +1,13 @@
 $(document).ready(function () {
+
     $("#userForm").live("submit", function(e) {
         $("#loader-a").attr("style","display:inline;");
         e.preventDefault();
         var _data = $(e.currentTarget).serialize();
         alert(_data);
-        console.log(_data);
         $.ajax({
             type: e.currentTarget.method,
             url: e.currentTarget.action,
-            dataType: "json",
             data: _data,
             success: function(data) {
                 $(e.currentTarget).find("div.message p").html(data.message);
@@ -17,6 +16,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     $(e.currentTarget).find("div.message").hide();
                 }, 5000);
+                $(e.currentTarget).get(0).reset();
             },
             error: function(xhr, textStatus, errorThrown) {
                 var em = jQuery.parseJSON(xhr.responseText)

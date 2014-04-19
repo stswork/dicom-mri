@@ -99,13 +99,13 @@ public class PatientController extends Controller {
         Patient p;
         //Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asFormUrlEncoded();
-        Long id = Long.valueOf(StringUtils.isEmpty(map.get("id")[0]) ? "0" : map.get("id")[0]);
-        Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
-        String fullName = StringUtils.isEmpty(map.get("fullName")[0]) ? StringUtils.EMPTY : map.get("fullName")[0];
-        String email = StringUtils.isEmpty(map.get("email")[0]) ? StringUtils.EMPTY : map.get("email")[0];
-        Integer age = Integer.valueOf(StringUtils.isEmpty(map.get("age")[0]) ? "0" : map.get("age")[0]);
-        String comment = StringUtils.isEmpty(map.get("comment")[0]) ? StringUtils.EMPTY : map.get("comment")[0];
-        String gender = StringUtils.isEmpty(map.get("gender")[0]) ? StringUtils.EMPTY : map.get("gender")[0];
+        Long id = Long.valueOf(map.get("id") == null ? "0" : map.get("id")[0]);
+        Long albumId = Long.valueOf(map.get("albumId") == null ? "0" : map.get("albumId")[0]);
+        String fullName = map.get("fullName") == null ? StringUtils.EMPTY : map.get("fullName")[0];
+        String email = map.get("email") == null  ? StringUtils.EMPTY : map.get("email")[0];
+        Integer age = Integer.valueOf(map.get("age") == null  ? "0" : map.get("age")[0]);
+        String comment = map.get("comment") == null  ? StringUtils.EMPTY : map.get("comment")[0];
+        String gender = map.get("gender") == null  ? StringUtils.EMPTY : map.get("gender")[0];
         String[] dIds = map.get("doctorIds");
         Form<PatientRequest> pf = null;
         /*if(pf.hasErrors())
@@ -315,7 +315,7 @@ public class PatientController extends Controller {
             review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
-        return ok(views.html.patient.step2.render("Data list", u, a.getId()));
+        return ok(views.html.patient.step2.render("Data list", u, a == null ? 0 : a.getId()));
     }
 
     @Transactional
@@ -325,8 +325,9 @@ public class PatientController extends Controller {
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
-
         Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
+        if(albumId <= 0)
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
         Album a = Album.find.byId(albumId);
         if(a == null)
             return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));

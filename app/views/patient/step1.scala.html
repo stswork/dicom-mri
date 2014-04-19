@@ -94,8 +94,9 @@
                         }
                     </tr>
 
-                    @if(review.getAlbum() == null){
+
                     <tr>
+                        @if(review.getAlbum() == null){
                         <td><p class="contact"><label for="doctorIds">Doctors:</label></p></td>
                         <td><select class="gender" name="doctorIds" id="doctorIds" multiple>
                              @for(u <- user) {
@@ -103,11 +104,11 @@
                              }
                             </select>
                         </td>
+                        }
                         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
                             <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
                         }
                     </tr>
-                    }
                     <tr>
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="@review.getAlbum().getId()">

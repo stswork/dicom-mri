@@ -51,7 +51,7 @@ import java.util.UUID;
 public class PatientController extends Controller {
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
-
+    public static final String telestroke_url = "telestroke.url.name";
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
     @With(Authenticated.class)
     public static Result save(Long id) {
@@ -246,7 +246,7 @@ public class PatientController extends Controller {
                 }
                 try {
 
-                    String url="http://localhost:9000?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
+                    String url=telestroke_url+"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
 
                     //SENDING REGISTRATION SMS
                     String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();

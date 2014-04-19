@@ -41,16 +41,18 @@ public class AuthenticationController extends Controller {
             String password = StringUtils.isEmpty(request().queryString().get("password")[0])? StringUtils.EMPTY :request().queryString().get("password")[0];
             Long id = StringUtils.isEmpty(request().queryString().get("id")[0]) ? 0 : Long.parseLong(request().queryString().get("id")[0]);
             if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || id <= 0){
-                doctorLogin(username, password, id);
+                return ok(views.html.index.render("Welcome"));
             }
-            if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && id > 0){
+           else{
                 doctorLogin(username, password, id);
+                return redirect(controllers.patient.routes.PatientController.save(id));
             }
-            return redirect(controllers.patient.routes.PatientController.save(id));
+
         }
         else{
             return ok(views.html.index.render("Welcome"));
         }
+
     }
 
     @BodyParser.Of(BodyParser.Json.class)

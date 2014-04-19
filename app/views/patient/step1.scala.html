@@ -27,10 +27,11 @@
                     <tr>
                         <td><p class="contact"><label for="fullName">Patient Name :</label></p></td>
                         @if(review.getAlbum() != null && review.getAlbum().getPatient() != null && review.getAlbum().getPatient().getFullName() != null) {
-                            @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
-                                  <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text" disabled></td>
+                            @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
+                                <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text"></td>
+
                              } else {
-                                 <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text"></td>
+                                <td><input id="fullName" name="fullName" placeholder="First and last name" value="@review.getAlbum().getPatient().getFullName()" required="" type="text" disabled></td>
                              }
                         } else {
                             <td><input id="fullName" name="fullName" placeholder="First and last name" required="" type="text"></td>
@@ -88,7 +89,11 @@
                     <tr>
                         <td><p class="contact"><label for="comment">MRI SCAN Comments :</label></p></td>
                         @if(!mriComment.equals("")) {
+                        @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
                              <td colspan="5"><input type="textarea" id="comment" name="comment" value="@mriComment" placeholder="Please enter your comments"  rows="4" cols="50" disabled/></td>
+                        }  else {
+                        <td colspan="5"><input type="textarea" id="comment" name="comment" value="@mriComment" placeholder="Please enter your comments"  rows="4" cols="50"/></td>
+                        }
                         } else {
                             <td colspan="5"><input type="textarea" id="comment" name="comment" value="" placeholder="Please enter your comments"  rows="4" cols="50"/></td>
                         }

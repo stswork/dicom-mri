@@ -21,7 +21,8 @@ import play.mvc.With;
 
 public class AuthenticationController extends Controller {
 
-    @With(Authenticated.class)
+    @BodyParser.Of(BodyParser.Json.class)
+
     public static Result login() {
         /*Login l = Ebean.find(Login.class).orderBy("created desc").setMaxRows(1).findUnique();
         if (StringUtils.isEmpty(session("user"))) {
@@ -42,8 +43,14 @@ public class AuthenticationController extends Controller {
             if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || id <= 0){
                 doctorLogin(username, password, id);
             }
+            if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && id > 0){
+                doctorLogin(username, password, id);
+            }
+            return redirect(controllers.patient.routes.PatientController.save(id));
         }
-        return ok(views.html.index.render("Welcome"));
+        else{
+            return ok(views.html.index.render("Welcome"));
+        }
     }
 
     @BodyParser.Of(BodyParser.Json.class)

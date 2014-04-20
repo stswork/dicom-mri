@@ -23,6 +23,9 @@
                         } else {
                             <td><input type="hidden" id="id" name="id"></td>
                         }
+                        @if(review != null) {
+                            <td><input type="hidden" id="reviewId" name="reviewId" value="@review.getId()"></td>
+                        }
                     </tr>
                     <tr>
                         <td><p class="contact"><label for="fullName">Patient Name :</label></p></td>

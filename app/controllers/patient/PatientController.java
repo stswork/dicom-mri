@@ -34,7 +34,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
-import service.TelestrokeWebService;
 import utils.DicomManager;
 import utils.FileExtensionCheckUtil;
 
@@ -76,7 +75,7 @@ public class PatientController extends Controller {
 		StringBuilder sb = new StringBuilder();
         if(r != null) {
 			List<Comment> comments = r.getAlbum().getCommentList();
-			for(Comment c: comments){
+            for(Comment c: comments){
 				if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
 					sb.append(c.getMessage());
 			}
@@ -94,6 +93,7 @@ public class PatientController extends Controller {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         List<Http.MultipartFormData.FilePart> fps;
+        models.response.review.Review review = null;
         Album a = null;
         Comment c = null;
         Patient p;
@@ -181,6 +181,17 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }*/
+            List<Comment> comments = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
+                    Expr.and(
+                            Expr.eq("album.id", a.getId()),
+                            Expr.eq("commentedBy.userType", UserType.MRI_SCAN_CENTER)
+                    )
+            ).findList();
+            if(comments.size() > 0) {
+                for(Comment cmt: comments) {
+                    cmt.delete();
+                }
+            }
             c = new Comment(comment, a, loggedInUser);
             c.setCreatedBy(loggedInUser);
             c.save();
@@ -219,7 +230,6 @@ public class PatientController extends Controller {
         }
 
         //SAVING REVIEW LIST
-
         if(dIds != null && dIds.length > 0) {
             for(String did: dIds) {
                 Long _did = Long.valueOf(did);
@@ -301,8 +311,10 @@ public class PatientController extends Controller {
                     }
                 }
                 album = new models.response.album.Album(r.getAlbum().getId(), comments, images);
+            } else {
+
             }
-            models.response.review.Review review = new models.response.review.Review();
+            review = new models.response.review.Review();
             review.setId(r.getId());
             review.setAssignedToId(r.getAssignedTo().getId());
             review.setAssignedToName(r.getAssignedTo() == null || StringUtils.isEmpty(r.getAssignedTo().getDisplayName()) ? StringUtils.EMPTY : r.getAssignedTo().getDisplayName());
@@ -315,6 +327,7 @@ public class PatientController extends Controller {
             review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
+
         return ok(views.html.patient.step2.render("Data list", u, a == null ? 0 : a.getId()));
     }
 

@@ -241,4 +241,4 @@ DESCRIPTION: A premium business and portfolio theme.
 	.clearfix:after						{clear:both; content:' '; display:block; font-size:0; line-height:0; visibility:hidden; width:0; height:0;}
 	* html .clearfix 					{height:1%;}
 	.alpha								{margin-left:0;}
-	.omega								{margin-right:0;}
+	.omega								{margin-right:0;

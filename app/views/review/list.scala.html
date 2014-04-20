@@ -13,13 +13,19 @@
         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
         <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
         }
-        <div id="disable-dialog" style="display:none; width: 10%;" title="Pickup Request Action">
-            <p><h4>Do you want to disable this created review?</h4></p>
+        <div id="disable-dialog" style="display:none; width: 10%;" title="Disable Review">
+            <p>Do you want to disable this created review?</p>
+            <div class="span3"><img src='@routes.Assets.at("images/loader.gif")' id="loader-d" style="display:none;"/></div>
         </div>
         <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ" style="margin: 13px 0px 0px 0px;"/>
         </div>
         <div style="width:100%;" class="form">
             <form id="contactform">
+                <div class="box message" style="display:none;padding-top: 2%;padding-left: 1%;padding-bottom: 2%;color: red;">
+                    <div class="content-m">
+                        <p></p>
+                    </div>
+                </div>
                 <table cellspacing="0" id="reviewList">
                     <tr>
                       <!--  <th>Sr No.</th>-->
@@ -74,7 +80,7 @@
                             }
                             @if(!u.getUserType().toUpperCase().equalsIgnoreCase("DOCTOR")) {
                             <td><a href="/patient/@r.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
-                            <td><a class="disable" data-href="@controllers.review.routes.ReviewController.disable()" data-id="@r.getId()"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;cursor: pointer;" alt="Delete" title="Delete"></a></td>
+                            <td><a class="disable" id="disable-action" data-href="@controllers.review.routes.ReviewController.disable()" data-id="@r.getId()"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;cursor: pointer;" alt="Delete" title="Delete"></a></td>
                             }
                         </tr>
                     }
@@ -87,10 +93,13 @@
     @footer()
 </div>
 } {
-
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/table.css")'>
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/tablePaginator.css")'>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<style type="text/css">
+.ui-dialog-titlebar-close {
+    display: none;
+}
+</style>
 <script type="text/javascript" src='@routes.Assets.at("javascripts/jquery.tablePagination.0.5.js")'></script>
 <script type="text/javascript">
 
@@ -139,26 +148,65 @@
             $('#reviewList').tablePagination(options);
 
             /** disable click **/
-            $('table a.disable').live("click", function(e) {
+            $('#disable-action').live("click", function(e) {
                    e.preventDefault();
                    var _uri = $(e.currentTarget).data().href;
                    var _id = $(e.currentTarget).data().id;
-                   console.log(_uri);
-                   console.log(_id);
-                    $.ajax({
-                            type: "POST",
-                            url: _uri,
-                            data: "id=" + _id,
-                            success: function(e) {
-                                window.location='/unreviewed';
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.log(errorThrown);
-                            },
-                            dataType: "json"
-                        });
+                   $("#disable-dialog").dialog({
+                    resizable: false,
+                    dialogClass: 'no-close',
+                    closeOnEscape: "true",
+                    show: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    buttons: [
+                        {
+                            text: "YES",
+                            width: 100,
+                            class: 'btn btn-warning',
+                            click: function() {
+                                $.ajax({
+                                        type: "POST",
+                                        url: _uri,
+                                        data: "id=" + _id,
+                                        success: function(e) {
+                                            $(document).ready(function() {
+                                            $('.ui-dialog-buttonpane').hide();
+                                            $("#disable-dialog p").html("Review removed from the list!");
+                                            setTimeout(function () {
+                                                window.location='/unreviewed';
+                                            }, 2500);
+                                            });
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) {
+                                            $('#contactform').find("div.message p").html(errorThrown);
+                                            $('#contactform').find("div.message").show();
+                                            setTimeout(function () {
+                                                $('#contactform').find("div.message").hide();
+                                            }, 5000);
+                                        },
+                                        dataType: "json"
+                                    });
+                                }
+                        },
+                        {
+                            text: "NO",
+                            width: 100,
+                            class: 'btn',
+                            click: function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    ]
                     });
-    });
+                console.log(e);
+            });
+            });
 </script>
 <!-- Table goes in the document BODY -->
 }

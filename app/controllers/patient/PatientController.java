@@ -99,8 +99,8 @@ public class PatientController extends Controller {
         Patient p;
         //Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asFormUrlEncoded();
-        Long id = Long.valueOf(map.get("id") == null ? "0" : map.get("id")[0]);
-        Long albumId = Long.valueOf(map.get("albumId") == null ? "0" : map.get("albumId")[0]);
+        Long id = Long.valueOf(StringUtils.isEmpty(map.get("id")[0]) ? "0" : map.get("id")[0]);
+        Long albumId = Long.valueOf(StringUtils.isEmpty(map.get("albumId")[0]) ? "0" : map.get("albumId")[0]);
         String fullName = map.get("fullName") == null ? StringUtils.EMPTY : map.get("fullName")[0];
         String email = map.get("email") == null  ? StringUtils.EMPTY : map.get("email")[0];
         Integer age = Integer.valueOf(map.get("age") == null  ? "0" : map.get("age")[0]);

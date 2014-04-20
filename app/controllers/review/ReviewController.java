@@ -43,7 +43,7 @@ public class ReviewController extends Controller {
         String sortBy = "created";
         String order = "desc";
         if(User.find.byId(u.getId()).getUserType().equals(UserType.SUPER_USER))
-            reviewList = query.where(Expr.eq("reviewed", false)).findList();
+            reviewList = query.where(Expr.eq("reviewed", false)).orderBy(sortBy + " " + order).findList();
         else {
             reviewList = query.where(
                     Expr.and(
@@ -102,8 +102,10 @@ public class ReviewController extends Controller {
         List<models.response.review.Review> reviews = new ArrayList<models.response.review.Review>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         Query<Review> query = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient");
+        String sortBy = "created";
+        String order = "desc";
         if(User.find.byId(u.getId()).getUserType().equals(UserType.SUPER_USER))
-            reviewList = query.where(Expr.eq("reviewed", true)).findList();
+            reviewList = query.where(Expr.eq("reviewed", true)).orderBy(sortBy + " " + order).findList();
         else {
             reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient").where(
                     Expr.and(
@@ -116,7 +118,7 @@ public class ReviewController extends Controller {
                                     Expr.eq("status", models.Status.ACTIVE)
                             )
                     )
-            ).findList();
+            ).orderBy(sortBy + " " + order).findList();
         }
         if(reviewList == null || reviewList.size() <= 0)
             reviewList = new ArrayList<Review>();
@@ -187,6 +189,6 @@ public class ReviewController extends Controller {
         r.setStatus(models.Status.DISABLED);
         r.setModifiedBy(loggedInUser);
         r.update();
-        return ok(Json.toJson(new ResponseMessage(200, "Deleted successfully!", ResponseMessageType.SUCCESSFUL)));
+        return ok(Json.toJson(new ResponseMessage(200, "Review removed from the list!", ResponseMessageType.SUCCESSFUL)));
     }
 }

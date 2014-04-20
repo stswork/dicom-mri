@@ -180,17 +180,7 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }*/
-            List<Comment> comments = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
-                    Expr.and(
-                            Expr.eq("album.id", a.getId()),
-                            Expr.eq("commentedBy.userType", UserType.MRI_SCAN_CENTER)
-                    )
-            ).findList();
-            if(comments.size() > 0) {
-                for(Comment cmt: comments) {
-                    cmt.delete();
-                }
-            }
+
             c = new Comment(comment, a, loggedInUser);
             c.setCreatedBy(loggedInUser);
             c.save();
@@ -211,7 +201,7 @@ public class PatientController extends Controller {
             p.setAge(age);
             p.setModifiedBy(loggedInUser);
             p.update();
-            c = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
+            /*c = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
                     Expr.and(
                             Expr.and(
                                     Expr.eq("album.id", albumId),
@@ -219,13 +209,22 @@ public class PatientController extends Controller {
                             ),
                             Expr.eq("message", comment)
                     )
-            ).setMaxRows(1).findUnique();
-            if(c == null) {
-                a = Album.find.byId(albumId);
-                c = new Comment(comment, a, loggedInUser);
-                c.setCreatedBy(loggedInUser);
-                c.save();
+            ).setMaxRows(1).findUnique();*/
+            List<Comment> comments = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
+                    Expr.and(
+                            Expr.eq("album.id", albumId),
+                            Expr.eq("commentedBy.userType", UserType.MRI_SCAN_CENTER)
+                    )
+            ).findList();
+            if(comments.size() > 0) {
+                for(Comment cmt: comments) {
+                    cmt.delete();
+                }
             }
+            a = Album.find.byId(albumId);
+            c = new Comment(comment, a, loggedInUser);
+            c.setCreatedBy(loggedInUser);
+            c.save();
         }
 
         //SAVING REVIEW LIST

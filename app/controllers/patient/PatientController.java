@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import play.Logger;
+import play.Play;
 import play.data.Form;
 import play.libs.Akka;
 import play.libs.Json;
@@ -51,7 +52,7 @@ import java.util.UUID;
 public class PatientController extends Controller {
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
-    public static final String telestroke_url = "telestroke.url.name";
+    public static final String telestroke_url = Play.application().configuration().getString("telestroke.url.name");
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
     @With(Authenticated.class)
     public static Result save(Long id) {

@@ -10,7 +10,6 @@ import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
 import models.actor.messaging.exotel.SendSmsActorMessage;
-import models.amazon.s3.S3File;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
 import models.review.Review;
@@ -43,7 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by Sagar Gopale on 3/8/14.
@@ -51,7 +49,7 @@ import java.util.UUID;
 public class PatientController extends Controller {
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
-    public static final String telestroke_url = Play.application().configuration().getString("telestroke.url.name");
+    public static final String TELESTROKE_URL = Play.application().configuration().getString("telestroke.url.name");
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
     @With(Authenticated.class)
     public static Result save(Long id) {
@@ -257,7 +255,7 @@ public class PatientController extends Controller {
                 }
                 try {
 
-                    String url=telestroke_url+"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
+                    String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
 
                     //SENDING REGISTRATION SMS
                     String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
@@ -265,9 +263,8 @@ public class PatientController extends Controller {
                     ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
                     ssa.tell(ssam, ssa);
 
-
                     //SENDING EMAIL
-                    Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone(),url);
+                    Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {
@@ -328,7 +325,6 @@ public class PatientController extends Controller {
             review.setCreated(fmt.print(r.getCreated().getTime()));
             reviews.add(review);
         }
-
         return ok(views.html.patient.step2.render("Data list", u, a == null ? 0 : a.getId()));
     }
 

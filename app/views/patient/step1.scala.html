@@ -118,7 +118,7 @@
                         @if(review.getAlbum() != null && review.getAlbum().getId() != null) {
                             <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="@review.getAlbum().getId()">
                         } else {
-                            <td colspan="4"><input type="hidden" id="albumId" name="albumId" value="">
+                            <td colspan="4"><input type="hidden" id="albumId" name="albumId">
                         }
                         @if(review.getAlbum() != null && review.getAlbum().getImageList() != null && review.getAlbum().getImageList().size() > 0) {
                             @for(img <- review.getAlbum().getImageList()) {

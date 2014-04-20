@@ -43,8 +43,11 @@ public class AuthenticationController extends Controller {
                 return ok(views.html.index.render("Welcome"));
             }
            else{
-                doctorLogin(username, password, id);
-                return redirect(controllers.patient.routes.PatientController.save(id));
+                boolean isAuthenticated = doctorLogin(username, password, id);
+                if(isAuthenticated)
+                    return redirect(controllers.patient.routes.PatientController.save(id));
+                else
+                    return redirect(controllers.routes.AuthenticationController.login());
             }
         }
         else {
@@ -87,7 +90,7 @@ public class AuthenticationController extends Controller {
         return ok();
     }
 
-    public static Result doctorLogin(String username, String password, Long id){
+    public static boolean doctorLogin(String username, String password, Long id){
         try {
             ObjectMapper mapper = new ObjectMapper();
             /*String username=StringUtils.isEmpty(request().queryString().get("username")[0].toString()) ? null:request().queryString().get("username")[0].toString();
@@ -101,14 +104,14 @@ public class AuthenticationController extends Controller {
                     )
             ).setMaxRows(1).findUnique();
             if(u == null)
-                return notFound(Json.toJson(new ResponseMessage(404, "No such user found!", ResponseMessageType.NOT_FOUND)));
+                return false;
             models.response.user.User _responseUser = new models.response.user.User(u.getId(), u.getUserName(), u.getDisplayName(), u.getUserType().name().toUpperCase());
             session("user", StringUtils.toString(org.apache.commons.codec.binary.Base64.encodeBase64(mapper.writeValueAsString(_responseUser).getBytes()), "UTF-8"));
-            return redirect(controllers.patient.routes.PatientController.save(0));
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return badRequest(Json.toJson(new ResponseMessage(400, "No such user found!", ResponseMessageType.BAD_REQUEST)));
         }
+        return false;
     }
 
     public static Result logout() {

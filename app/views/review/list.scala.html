@@ -13,8 +13,8 @@
         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
         <button onclick="location.href='@controllers.patient.routes.PatientController.save(0)'" style="font-size: 18px;">Add Patient</button>
         }
-        <div id="disable-dialog" style="display:none; width: 10%;" title="Disable Review">
-            <p>Do you want to disable this created review?</p>
+        <div id="disable-dialog" style="display:none; width: 10%;" title="Delete Record">
+            <p>Do you want to delete this record?</p>
             <div class="span3"><img src='@routes.Assets.at("images/loader.gif")' id="loader-d" style="display:none;"/></div>
         </div>
         <input type="text" placeholder="Patient Name/ Email/ Assigned To" name="searchQ" id="searchQ" style="margin: 13px 0px 0px 0px;"/>
@@ -177,7 +177,7 @@
                                         success: function(e) {
                                             $(document).ready(function() {
                                             $('.ui-dialog-buttonpane').hide();
-                                            $("#disable-dialog p").html("Review removed from the list!");
+                                            $("#disable-dialog p").html("Record deleted successfully!");
                                             setTimeout(function () {
                                                 window.location='/unreviewed';
                                             }, 2500);

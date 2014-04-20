@@ -10,7 +10,6 @@ import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
 import models.actor.messaging.exotel.SendSmsActorMessage;
-import models.amazon.s3.S3File;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
 import models.review.Review;
@@ -35,7 +34,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
-import service.TelestrokeWebService;
 import utils.DicomManager;
 import utils.FileExtensionCheckUtil;
 
@@ -44,7 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by Sagar Gopale on 3/8/14.
@@ -52,7 +49,7 @@ import java.util.UUID;
 public class PatientController extends Controller {
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
-    public static final String telestroke_url = Play.application().configuration().getString("telestroke.url.name");
+    public static final String TELESTROKE_URL = Play.application().configuration().getString("telestroke.url.name");
     //Will be used to display the form to save a patient or edit a patient. Id will be passed if it is edit patient function
     @With(Authenticated.class)
     public static Result save(Long id) {
@@ -77,7 +74,7 @@ public class PatientController extends Controller {
 		StringBuilder sb = new StringBuilder();
         if(r != null) {
 			List<Comment> comments = r.getAlbum().getCommentList();
-			for(Comment c: comments){
+            for(Comment c: comments){
 				if(c.getCommentedBy().getUserType().equals(UserType.MRI_SCAN_CENTER))
 					sb.append(c.getMessage());
 			}
@@ -95,6 +92,7 @@ public class PatientController extends Controller {
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         List<Http.MultipartFormData.FilePart> fps;
+        models.response.review.Review review = null;
         Album a = null;
         Comment c = null;
         Patient p;
@@ -182,6 +180,17 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }*/
+            List<Comment> comments = Ebean.find(Comment.class).fetch("album").fetch("commentedBy").where(
+                    Expr.and(
+                            Expr.eq("album.id", a.getId()),
+                            Expr.eq("commentedBy.userType", UserType.MRI_SCAN_CENTER)
+                    )
+            ).findList();
+            if(comments.size() > 0) {
+                for(Comment cmt: comments) {
+                    cmt.delete();
+                }
+            }
             c = new Comment(comment, a, loggedInUser);
             c.setCreatedBy(loggedInUser);
             c.save();
@@ -220,7 +229,6 @@ public class PatientController extends Controller {
         }
 
         //SAVING REVIEW LIST
-
         if(dIds != null && dIds.length > 0) {
             for(String did: dIds) {
                 Long _did = Long.valueOf(did);
@@ -247,7 +255,7 @@ public class PatientController extends Controller {
                 }
                 try {
 
-                    String url=telestroke_url+"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
+                    String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+p.getId();
 
                     //SENDING REGISTRATION SMS
                     String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
@@ -255,9 +263,8 @@ public class PatientController extends Controller {
                     ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
                     ssa.tell(ssam, ssa);
 
-
                     //SENDING EMAIL
-                    Mail mail = new Mail(p.getFullName(), p.getEmail(),p.getAge(),p.getGender(), user.getDisplayName(), user.getUserName(),u.getDisplayName(),u.getLocation(),u.getPhone(),url);
+                    Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
                     ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                     mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
                 } catch (Exception e) {
@@ -302,8 +309,10 @@ public class PatientController extends Controller {
                     }
                 }
                 album = new models.response.album.Album(r.getAlbum().getId(), comments, images);
+            } else {
+
             }
-            models.response.review.Review review = new models.response.review.Review();
+            review = new models.response.review.Review();
             review.setId(r.getId());
             review.setAssignedToId(r.getAssignedTo().getId());
             review.setAssignedToName(r.getAssignedTo() == null || StringUtils.isEmpty(r.getAssignedTo().getDisplayName()) ? StringUtils.EMPTY : r.getAssignedTo().getDisplayName());

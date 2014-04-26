@@ -67,8 +67,11 @@ public class PatientController extends Controller {
                 ).findUnique() : null;
         List<User> users= Ebean.find(User.class).where(
                 Expr.and(
-                        Expr.ne("id", 1),
-                        Expr.eq("userType", UserType.DOCTOR)
+                        Expr.and(
+                                Expr.ne("id", 1L),
+                                Expr.eq("userType", UserType.DOCTOR)
+                        ),
+                        Expr.eq("status", models.Status.ACTIVE)
                 )
         ).findList();
 		StringBuilder sb = new StringBuilder();

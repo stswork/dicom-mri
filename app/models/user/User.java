@@ -1,5 +1,6 @@
 package models.user;
 
+import models.Status;
 import models.review.Review;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import play.data.validation.Constraints;
@@ -48,6 +49,9 @@ public class User extends Model {
 
     @OneToOne
     private User modifiedBy;
+
+    @Constraints.Required
+    private Status status = Status.ACTIVE;
 
     public User() {
     }
@@ -149,4 +153,12 @@ public class User extends Model {
     public static Finder<Long, User> find = new Finder<Long, User>(
             Long.class, User.class
     );
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

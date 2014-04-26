@@ -9,11 +9,13 @@
         <header>
             <h1>User List</h1>
         </header>
-
         <button onclick="location.href='@controllers.user.routes.UserController.save(0)'" style="font-size: 18px;">Add User</button>
-
+        <div id="disable-dialog" style="display:none; width: 10%;" title="Delete Record">
+            <p>Do you want to delete this record?</p>
+            <div class="span3"><img src='@routes.Assets.at("images/loader.gif")' id="loader-d" style="display:none;"/></div>
+        </div>
         <div style="width:100%;" class="form">
-            <form id="contactform">
+            <form id="userForm">
                 <table  cellspacing="0">
                     <tr>
                         <!--  <th>Sr No.</th>-->
@@ -22,6 +24,7 @@
                         <th>User Type</th>
                         <th>Location</th>
                         <th>Phone</th>
+                        <th>Delete</th>
                        <!-- <th>Edit</th>
                         <th>Delete</th>
 -->
@@ -35,6 +38,7 @@
                         <td>@ur.getUserType().toString()</td>
                         <td>@ur.getLocation().toString()</td>
                         <td>@ur.getPhone().toString()</td>
+                        <td><a class="disable" id="disable-action" data-href="@controllers.user.routes.UserController.disable()" data-id="@ur.getId()"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;cursor: pointer;" alt="Delete" title="Delete"></a></td>
                        <!-- <td><a href="/user/@ur.getId()"><img src="@routes.Assets.at("images/edit.png")" style="width: 30px;" alt="Edit" title="Edit"></a></td>
                         <td><a href="#"><img src="@routes.Assets.at("images/delete.png")" style="width: 30px;" alt="Delete" title="Delete"></a></td>-->
                     </tr>
@@ -50,7 +54,11 @@
 } {
 
 <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/table.css")'>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<style type="text/css">
+    .ui-dialog-titlebar-close {
+    display: none;
+    }
+</style>
 <script type="text/javascript">
     $(function() {
     /* For zebra striping */
@@ -60,6 +68,68 @@
     /* For removing the last border */
     $("table td:last-child, table th:last-child").addClass("last");
     });
+
+    $(document).ready(function() {
+    /** disable click **/
+            $('#disable-action').live("click", function(e) {
+                   e.preventDefault();
+                   var _uri = $(e.currentTarget).data().href;
+                   var _id = $(e.currentTarget).data().id;
+                   $("#disable-dialog").dialog({
+                    resizable: false,
+                    dialogClass: 'no-close',
+                    closeOnEscape: "true",
+                    show: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    buttons: [
+                        {
+                            text: "YES",
+                            width: 100,
+                            class: 'btn btn-warning',
+                            click: function() {
+                                $.ajax({
+                                        type: "POST",
+                                        url: _uri,
+                                        data: "id=" + _id,
+                                        success: function(e) {
+                                            $(document).ready(function() {
+                                            $('.ui-dialog-buttonpane').hide();
+                                            $("#disable-dialog p").html("Record deleted successfully!");
+                                            setTimeout(function () {
+                                                window.location='/users';
+                                            }, 2500);
+                                            });
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) {
+                                            $('#contactform').find("div.message p").html(errorThrown);
+                                            $('#contactform').find("div.message").show();
+                                            setTimeout(function () {
+                                                $('#contactform').find("div.message").hide();
+                                            }, 5000);
+                                        },
+                                        dataType: "json"
+                                    });
+                                }
+                        },
+                        {
+                            text: "NO",
+                            width: 100,
+                            class: 'btn',
+                            click: function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    ]
+                    });
+                console.log(e);
+            });
+            });
 </script>
 
 <!-- Table goes in the document BODY -->

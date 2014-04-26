@@ -5,8 +5,10 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
+import models.Status;
 import models.response.ResponseMessage;
 import models.response.ResponseMessageType;
+import models.review.Review;
 import models.user.User;
 import models.user.UserType;
 import org.apache.commons.lang3.StringUtils;
@@ -31,16 +33,18 @@ import java.util.Map;
 public class UserController extends Controller {
 
     @With(Authenticated.class)
-    public static Result getUser(){
+    public static Result getUsers(){
         List<User> userList = new ArrayList<User>();
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         if(!UserType.valueOf(u.getUserType()).equals(UserType.SUPER_USER))
             return redirect(controllers.routes.AuthenticationController.login());
-        User user = new User();
-        Query<User> query = Ebean.find(User.class);
-        userList = Ebean.find(User.class).findList();
-
-        return ok(views.html.user.list.render("Members",u,userList));
+        userList = Ebean.find(User.class).where(
+                Expr.and(
+                        Expr.ne("id", 1L),
+                        Expr.eq("status", models.Status.ACTIVE)
+                )
+        ).findList();
+        return ok(views.html.user.list.render("Members", u, userList));
     }
 
     @With(Authenticated.class)
@@ -89,4 +93,23 @@ public class UserController extends Controller {
         return ok(Json.toJson(new ResponseMessage(200, "User successfully added!", ResponseMessageType.SUCCESSFUL)));
     }
 
+    @Transactional
+    @With(Authenticated.class)
+    public static Result disable(){
+        Long id = 0L;
+        models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        User loggedInUser = User.find.byId(u.getId());
+        try {
+            id = Long.parseLong(request().body().asFormUrlEncoded().get("id")[0]);
+        } catch(Exception e) {
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.NOT_FOUND)));
+        }
+        User user = User.find.byId(id);
+        if(user == null)
+            return notFound(Json.toJson(new ResponseMessage(404, "No such review found.", ResponseMessageType.NOT_FOUND)));
+        user.setStatus(models.Status.DISABLED);
+        user.setModifiedBy(loggedInUser);
+        user.update();
+        return ok(Json.toJson(new ResponseMessage(200, "Review removed from the list!", ResponseMessageType.SUCCESSFUL)));
+    }
 }

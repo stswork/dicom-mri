@@ -43,7 +43,12 @@ public class ReviewController extends Controller {
         String sortBy = "created";
         String order = "desc";
         if(User.find.byId(u.getId()).getUserType().equals(UserType.SUPER_USER))
-            reviewList = query.where(Expr.eq("reviewed", false)).orderBy(sortBy + " " + order).findList();
+            reviewList = query.where(
+                Expr.and(
+                        Expr.eq("reviewed", false),
+                        Expr.eq("status", models.Status.ACTIVE)
+                )
+            ).orderBy(sortBy + " " + order).findList();
         else {
             reviewList = query.where(
                     Expr.and(
@@ -105,7 +110,12 @@ public class ReviewController extends Controller {
         String sortBy = "created";
         String order = "desc";
         if(User.find.byId(u.getId()).getUserType().equals(UserType.SUPER_USER))
-            reviewList = query.where(Expr.eq("reviewed", true)).orderBy(sortBy + " " + order).findList();
+            reviewList = query.where(
+                    Expr.and(
+                            Expr.eq("reviewed", true),
+                            Expr.eq("status", models.Status.ACTIVE)
+                    )
+            ).orderBy(sortBy + " " + order).findList();
         else {
             reviewList = Ebean.find(Review.class).fetch("assignedTo").fetch("album").fetch("album.commentList").fetch("album.commentList.commentedBy").fetch("album.imageList").fetch("album.patient").where(
                     Expr.and(

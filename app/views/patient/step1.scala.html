@@ -114,7 +114,7 @@
                         </td>
                         }
                         @if(!u.getUserType().toUpperCase().equals("DOCTOR")) {
-                            <td><button class="button" name="submit" id="submit" value="Save">Next</button></td>
+                            <td><button class="button" name="submit" id="submit" value="Save">Upload</button></td>
                         }
                     </tr>
                     <tr>
@@ -140,7 +140,7 @@
             </form>
             @if(u.getUserType().toUpperCase().equals("DOCTOR")) {
             <form id="commentForm" method="post" action="@controllers.comment.routes.CommentController.handleSave()">
-                <table>
+                <table style="display: inline;">
                     <tr>
                         <td colspan="3"><div class="box message" style="display:none;padding-top: 2%;padding-left: 1%;padding-bottom: 2%;color: red;">
                             <div class="content-m">

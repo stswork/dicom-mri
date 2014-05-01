@@ -9,6 +9,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import models.actor.messaging.exotel.SendSmsActorMessage;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
@@ -99,6 +100,7 @@ public class PatientController extends Controller {
         Album a = null;
         Comment c = null;
         Patient p;
+        ObjectMapper mapper = new ObjectMapper();
         //Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asFormUrlEncoded();
         Long id = Long.valueOf(StringUtils.isEmpty(map.get("id")[0]) ? "0" : map.get("id")[0]);
@@ -232,11 +234,13 @@ public class PatientController extends Controller {
 
         //SAVING REVIEW LIST
         if(dIds != null && dIds.length > 0) {
+            List<User> users = new ArrayList<User>();
             for(String did: dIds) {
                 Long _did = Long.valueOf(did);
                 User user = User.find.byId(_did);
                 if(user == null)
                     return badRequest(Json.toJson(new ResponseMessage(400, "Invalid doctor selection!", ResponseMessageType.BAD_REQUEST)));
+                users.add(user);
                 Review r = null;
                 if(albumId <= 0) {
                     r = new Review(false, a, user);
@@ -255,23 +259,11 @@ public class PatientController extends Controller {
                         r.save();
                     }
                 }
-                try {
-
-                    String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+r.getId();
-
-                    //SENDING REGISTRATION SMS
-                    String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
-                    SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
-                    ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
-                    ssa.tell(ssam, ssa);
-
-                    //SENDING EMAIL
-                    Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
-                    ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
-                    mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            }
+            try {
+                flash("docIds", StringUtils.toString(org.apache.commons.codec.binary.Base64.encodeBase64(mapper.writeValueAsString(users).getBytes()), "UTF-8"));
+            } catch (Exception e) {
+                return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try later", ResponseMessageType.INTERNAL_SERVER_ERROR)));
             }
         }
 
@@ -333,6 +325,8 @@ public class PatientController extends Controller {
     @Transactional
     @With(Authenticated.class)
     public static Result stepTwo() {
+        ObjectMapper mapper = new ObjectMapper();
+        List<User> doctors = mapper.reader("");
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
@@ -390,6 +384,18 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }
+            String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+r.getId();
+
+            //SENDING REGISTRATION SMS
+            String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
+            SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
+            ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
+            ssa.tell(ssam, ssa);
+
+            //SENDING EMAIL
+            Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
+            ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
+            mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }

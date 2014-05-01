@@ -9,10 +9,12 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.Transactional;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.actor.messaging.exotel.SendSmsActorMessage;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
+import models.helper.StepTwoCache;
 import models.review.Review;
 import models.album.Album;
 import models.album.Image;
@@ -28,6 +30,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import play.Logger;
 import play.Play;
+import play.cache.Cache;
 import play.data.Form;
 import play.libs.Akka;
 import play.libs.Json;
@@ -260,11 +263,8 @@ public class PatientController extends Controller {
                     }
                 }
             }
-            try {
-                flash("docIds", StringUtils.toString(org.apache.commons.codec.binary.Base64.encodeBase64(mapper.writeValueAsString(users).getBytes()), "UTF-8"));
-            } catch (Exception e) {
-                return internalServerError(Json.toJson(new ResponseMessage(500, "Some error occurred! Please try later", ResponseMessageType.INTERNAL_SERVER_ERROR)));
-            }
+            StepTwoCache stc = new StepTwoCache(users, p, review.getId());
+            Cache.set(String.valueOf(u.getId()) + "twoCache", dIds);
         }
 
         //GETTING LIST OF PATIENTS
@@ -325,9 +325,21 @@ public class PatientController extends Controller {
     @Transactional
     @With(Authenticated.class)
     public static Result stepTwo() {
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> doctors = mapper.reader("");
+
+        List<User> doctors =  new ArrayList<User>();
+        Patient p = null;
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
+        StepTwoCache stc = (StepTwoCache) Cache.get(String.valueOf(u.getId()) + "twoCache");
+        doctors = stc.getDoctors();
+        p = stc.getPatient();
+        Long rId = stc.getReviewId();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            doctors = (List<User>) Cache.get(String.valueOf(u.getId()) + "dids");
+            p = (Patient) Cache.get(String.valueOf(u.getId()) + "p");
+        } catch (Exception e) {
+            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
+        }
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
@@ -384,18 +396,20 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }
-            String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+r.getId();
+            for (User user: doctors) {
+                String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+rId;
 
-            //SENDING REGISTRATION SMS
-            String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
-            SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
-            ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
-            ssa.tell(ssam, ssa);
+                //SENDING REGISTRATION SMS
+                String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
+                SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
+                ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
+                ssa.tell(ssam, ssa);
 
-            //SENDING EMAIL
-            Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
-            ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
-            mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
+                //SENDING EMAIL
+                Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
+                ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
+                mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
+            }
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }

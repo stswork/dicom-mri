@@ -264,7 +264,7 @@ public class PatientController extends Controller {
                 }
             }
             StepTwoCache stc = new StepTwoCache(users, p, review.getId());
-            Cache.set(String.valueOf(u.getId()) + "twoCache", dIds);
+            Cache.set(String.valueOf(u.getId()) + "twoCache", stc);
         }
 
         //GETTING LIST OF PATIENTS

@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import models.actor.messaging.exotel.SendSmsActorMessage;
 import models.comment.Comment;
 import models.actor.mailer.Mail;
-import models.helper.StepTwoCache;
 import models.review.Review;
 import models.album.Album;
 import models.album.Image;
@@ -262,9 +261,19 @@ public class PatientController extends Controller {
                         r.save();
                     }
                 }
+                String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+r.getId();
+
+                //SENDING REGISTRATION SMS
+                String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
+                SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
+                ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
+                ssa.tell(ssam, ssa);
+
+                //SENDING EMAIL
+                Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
+                ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
+                mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
             }
-            StepTwoCache stc = new StepTwoCache(users, p, review.getId());
-            Cache.set(String.valueOf(u.getId()) + "twoCache", stc);
         }
 
         //GETTING LIST OF PATIENTS
@@ -325,21 +334,15 @@ public class PatientController extends Controller {
     @Transactional
     @With(Authenticated.class)
     public static Result stepTwo() {
-
         List<User> doctors =  new ArrayList<User>();
-        Patient p = null;
         models.response.user.User u = (models.response.user.User) ctx().args.get("user");
-        StepTwoCache stc = (StepTwoCache) Cache.get(String.valueOf(u.getId()) + "twoCache");
-        doctors = stc.getDoctors();
-        p = stc.getPatient();
-        Long rId = stc.getReviewId();
         ObjectMapper mapper = new ObjectMapper();
-        /*try {
+        try {
             doctors = (List<User>) Cache.get(String.valueOf(u.getId()) + "dids");
-            p = (Patient) Cache.get(String.valueOf(u.getId()) + "p");
+
         } catch (Exception e) {
-            return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
-        }*/
+
+        }
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();
@@ -396,21 +399,6 @@ public class PatientController extends Controller {
                     e.printStackTrace();
                 }
             }
-            for (User user: doctors) {
-                String url= TELESTROKE_URL +"?username="+user.getUserName()+"&password="+user.getPassword()+"&id="+rId;
-
-                //SENDING REGISTRATION SMS
-                String exotelSmsBody = "Message from Telestroke, \nNew patient details " + url + "\nfrom  " + u.getDisplayName();
-                SendSmsActorMessage ssam = new SendSmsActorMessage(exotelSmsBody, user.getPhone());
-                ActorRef ssa = Akka.system().actorOf(new Props(SendSmsActor.class));
-                ssa.tell(ssam, ssa);
-
-                //SENDING EMAIL
-                Mail mail = new Mail(p.getFullName(), p.getEmail(), p.getAge(), p.getGender(), user.getDisplayName(), user.getUserName(), u.getDisplayName(), u.getLocation(), u.getPhone(), url);
-                ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
-                mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
-            }
-            Cache.remove(String.valueOf(u.getId()) + "twoCache");
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }

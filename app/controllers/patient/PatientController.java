@@ -334,12 +334,12 @@ public class PatientController extends Controller {
         p = stc.getPatient();
         Long rId = stc.getReviewId();
         ObjectMapper mapper = new ObjectMapper();
-        try {
+        /*try {
             doctors = (List<User>) Cache.get(String.valueOf(u.getId()) + "dids");
             p = (Patient) Cache.get(String.valueOf(u.getId()) + "p");
         } catch (Exception e) {
             return badRequest(Json.toJson(new ResponseMessage(400, "Invalid parameters passed!", ResponseMessageType.BAD_REQUEST)));
-        }
+        }*/
         User loggedInUser = User.find.byId(u.getId());
         Http.MultipartFormData fd = request().body().asMultipartFormData();
         Map<String, String[]> map = request().body().asMultipartFormData().asFormUrlEncoded();

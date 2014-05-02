@@ -410,6 +410,7 @@ public class PatientController extends Controller {
                 ActorRef mailActor = Akka.system().actorOf(Props.create(MailSenderActor.class));
                 mailActor.tell(mail,mailActor);//, routes.Assets.at("images/email-template/logo.png").absoluteURL(request()), routes.Assets.at("images/email-template/tagline.gif").absoluteURL(request()), routes.Assets.at("images/email-template/content_box_bott.gif").absoluteURL(request())
             }
+            Cache.remove(String.valueOf(u.getId()) + "twoCache");
         } catch (Exception e) {
             Logger.error(e.getMessage(), e);
         }
